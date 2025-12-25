@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資金調達オプション完全比較 | 詳細タイムチャート v2.5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; height: 320px; width: 100%; }
+        .table-container { overflow-x: auto; }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.75rem; }
+        th { background-color: #f1f5f9; border-bottom: 2px solid #e2e8f0; padding: 6px 8px; font-weight: 800; text-align: left; color: #475569; position: sticky; top: 0; z-index: 10; }
+        td { border-bottom: 1px solid #f1f5f9; padding: 5px 8px; color: #1e293b; }
+        section { scroll-margin-top: 80px; }
+        .highlight-row { background-color: rgba(59, 130, 246, 0.08); }
+        .param-hero { @apply text-2xl font-black tracking-tighter text-slate-900 mt-0.5 block; }
+        .param-hero-label { @apply text-[9px] font-black uppercase tracking-[0.1em] text-slate-400 block; }
+        .section-card { @apply bg-white rounded-[1.5rem] shadow-sm border border-slate-200 overflow-hidden mb-8; }
+        
+        /* Slider Styling */
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: #e2e8f0; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #3b82f6; cursor: pointer; border-radius: 50%; }
+        
+        .total-profit-badge { @apply bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-black text-sm border border-blue-100; }
+    </style>
+</head>
+<body class="text-slate-900 pb-20">
+
+    <nav class="bg-slate-900 text-white sticky top-0 z-50 shadow-xl">
+        <div class="max-w-[1600px] mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="font-black text-xl tracking-tighter text-white">株式会社ロボットペイメント</span>
+            </div>
+            <div class="flex gap-6 items-center">
+                <a href="#summary" class="text-xs font-bold text-slate-400 hover:text-white transition">シミュレーション比較</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-[1600px] mx-auto px-8 mt-10 space-y-8">
+
+        <!-- 1. RBF -->
+        <section id="rbf" class="section-card">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">01</span>
+                    <h2 class="text-xl font-black tracking-tight text-slate-900">RBF</h2>
+                </div>
+                <div class="flex gap-8 items-center flex-1 max-w-3xl px-6">
+                    <div class="flex-1">
+                        <span class="param-hero-label">手数料率: <span id="rbfRateLabel" class="text-blue-600 font-black">10.0</span>%</span>
+                        <input type="range" id="rbfRateSlider" min="1" max="30" step="0.5" value="10">
+                    </div>
+                    <div class="flex-1">
+                        <span class="param-hero-label">返済期間: <span id="rbfTermLabel" class="text-blue-600 font-black">6</span>ヶ月</span>
+                        <input type="range" id="rbfTermSlider" min="1" max="12" step="1" value="6">
+                    </div>
+                    <div class="min-w-[100px]">
+                        <span class="param-hero-label">利息回収合計</span>
+                        <span id="rbfTotalProfit" class="total-profit-badge">100.00万</span>
+                    </div>
+                </div>
+                <div class="flex gap-6 border-l border-slate-200 pl-6 text-right">
+                    <div><span class="param-hero-label">提供額</span><span class="param-hero">1,000万</span></div>
+                </div>
+            </div>
+            <div class="p-6 grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-900 p-5 rounded-[1rem]">
+                        <div class="chart-container">
+                            <canvas id="rbfChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-5">
+                    <div class="table-container border border-slate-200 rounded-[0.75rem] overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr><th>月</th><th>資金移動</th><th class="text-blue-600">元本</th><th class="text-blue-500">利息</th><th>残高</th></tr>
+                            </thead>
+                            <tbody id="rbfTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Maegari -->
+        <section id="maegari" class="section-card">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-teal-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">02</span>
+                    <h2 class="text-xl font-black tracking-tight text-slate-900">前借り君</h2>
+                </div>
+                <div class="flex gap-8 items-center flex-1 max-w-2xl px-6">
+                    <div class="flex-1">
+                        <span class="param-hero-label">設定年利: <span id="maegariRateLabel" class="text-teal-600 font-black">18.0</span>%</span>
+                        <input type="range" id="maegariRateSlider" min="1" max="50" step="0.5" value="18">
+                    </div>
+                    <div class="min-w-[100px]">
+                        <span class="param-hero-label">利息回収合計</span>
+                        <span id="maegariTotalProfit" class="total-profit-badge !bg-teal-50 !text-teal-700 !border-teal-100">180.00万</span>
+                    </div>
+                </div>
+                <div class="flex gap-6 border-l border-slate-200 pl-6">
+                    <div><span class="param-hero-label">貸付額</span><span class="param-hero">1,000万</span></div>
+                    <div><span class="param-hero-label">方式</span><span class="param-hero">元本据置</span></div>
+                </div>
+            </div>
+            <div class="p-6 grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-900 p-5 rounded-[1rem]">
+                        <div class="chart-container">
+                            <canvas id="maegariChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-5">
+                    <div class="table-container border border-slate-200 rounded-[0.75rem] overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr><th>月</th><th>資金移動</th><th class="text-teal-600">元本</th><th class="text-teal-500">利息</th><th>残高</th></tr>
+                            </thead>
+                            <tbody id="maegariTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Factoring -->
+        <section id="factoring" class="section-card">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-amber-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">03</span>
+                    <h2 class="text-xl font-black tracking-tight text-slate-900">ファクタリング</h2>
+                </div>
+                <div class="flex gap-8 items-center flex-1 max-w-3xl px-6">
+                    <div class="flex-1">
+                        <span class="param-hero-label">割引率: <span id="factoringRateLabel" class="text-amber-600 font-black">20.0</span>%</span>
+                        <input type="range" id="factoringRateSlider" min="1" max="40" step="1" value="20">
+                    </div>
+                    <div class="flex-1">
+                        <span class="param-hero-label">年回転数: <span id="factoringFreqLabel" class="text-amber-600 font-black">2</span>回</span>
+                        <input type="range" id="factoringFreqSlider" min="1" max="6" step="1" value="2">
+                    </div>
+                    <div class="min-w-[100px]">
+                        <span class="param-hero-label">利息回収合計</span>
+                        <span id="factoringTotalProfit" class="total-profit-badge !bg-amber-50 !text-amber-700 !border-amber-100">400.00万</span>
+                    </div>
+                </div>
+                <div class="flex gap-6 border-l border-slate-200 pl-6 text-right">
+                    <div><span class="param-hero-label">債権額</span><span class="param-hero">1,000万</span></div>
+                </div>
+            </div>
+            <div class="p-6 grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-900 p-5 rounded-[1rem]">
+                        <div class="chart-container">
+                            <canvas id="factoringChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-5">
+                    <div class="table-container border border-slate-200 rounded-[0.75rem] overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr><th>月</th><th>資金移動</th><th class="text-amber-600">元本</th><th class="text-amber-500">利息</th><th>残高</th></tr>
+                            </thead>
+                            <tbody id="factoringTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Early Settlement -->
+        <section id="early-settlement" class="section-card">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-emerald-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">04</span>
+                    <h2 class="text-xl font-black tracking-tight text-slate-900">早期払い</h2>
+                </div>
+                <div class="flex gap-8 items-center flex-1 max-w-2xl px-6">
+                    <div class="flex-1">
+                        <span class="param-hero-label">手数料率: <span id="earlyRateLabel" class="text-emerald-600 font-black">0.5</span>%</span>
+                        <input type="range" id="earlyRateSlider" min="0.1" max="5" step="0.1" value="0.5">
+                    </div>
+                    <div class="min-w-[100px]">
+                        <span class="param-hero-label">利息回収合計</span>
+                        <span id="earlyTotalProfit" class="total-profit-badge !bg-emerald-50 !text-emerald-700 !border-emerald-100">60.00万</span>
+                    </div>
+                </div>
+                <div class="flex gap-6 border-l border-slate-200 pl-6">
+                    <div><span class="param-hero-label">取扱枠</span><span class="param-hero">1,000万</span></div>
+                    <div><span class="param-hero-label">回収</span><span class="param-hero">なし</span></div>
+                </div>
+            </div>
+            <div class="p-6 grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-900 p-5 rounded-[1rem]">
+                        <div class="chart-container">
+                            <canvas id="earlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-5">
+                    <div class="table-container border border-slate-200 rounded-[0.75rem] overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr><th>月</th><th>資金移動</th><th class="text-emerald-600">元本</th><th class="text-emerald-500">利息</th><th>残高</th></tr>
+                            </thead>
+                            <tbody id="earlyTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section id="summary" class="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl border border-slate-800">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black text-white tracking-tighter mb-2">12ヶ月 累積利息収益比較サマリー</h2>
+                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em]">Integrated Yield Analysis</p>
+            </div>
+            <div class="chart-container !h-[450px]">
+                <canvas id="summaryChart"></canvas>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-16 py-10 bg-white border-t border-slate-200 text-center">
+        <p class="text-slate-400 text-[9px] font-black uppercase tracking-[0.5em]">© 2024 FINANCE LAB | STRATEGY DEVELOPMENT DIVISION</p>
+    </footer>
+
+    <script>
+        const formatNum = (v) => v.toFixed(2);
+        
+        let charts = {};
+        const provision = 1000;
+
+        const updateAll = () => {
+            const rbfRate = parseFloat(document.getElementById('rbfRateSlider').value);
+            const rbfTerm = parseInt(document.getElementById('rbfTermSlider').value);
+            const maegariRate = parseFloat(document.getElementById('maegariRateSlider').value);
+            const factoringRate = parseFloat(document.getElementById('factoringRateSlider').value);
+            const factoringFreq = parseInt(document.getElementById('factoringFreqSlider').value);
+            const earlyRate = parseFloat(document.getElementById('earlyRateSlider').value);
+
+            document.getElementById('rbfRateLabel').innerText = rbfRate.toFixed(1);
+            document.getElementById('rbfTermLabel').innerText = rbfTerm;
+            document.getElementById('maegariRateLabel').innerText = maegariRate.toFixed(1);
+            document.getElementById('factoringRateLabel').innerText = factoringRate.toFixed(1);
+            document.getElementById('factoringFreqLabel').innerText = factoringFreq;
+            document.getElementById('earlyRateLabel').innerText = earlyRate.toFixed(1);
+
+            // --- RBF Data ---
+            const rbfData = [];
+            let rbfCumInterest = 0;
+            const totalToRecover = provision * (1 + rbfRate / 100);
+            const monthlyRecover = totalToRecover / rbfTerm;
+            const rbfTableBody = document.getElementById('rbfTableBody');
+            rbfTableBody.innerHTML = '';
+            
+            for (let i = 0; i <= 12; i++) {
+                let move = 0, principal = 0, interest = 0, balance = 0;
+                if (i === 0) { move = -provision; balance = totalToRecover; }
+                else if (i <= rbfTerm) {
+                    move = monthlyRecover;
+                    interest = (provision * (rbfRate / 100)) / rbfTerm;
+                    principal = provision / rbfTerm;
+                    rbfCumInterest += interest;
+                    balance = totalToRecover - (monthlyRecover * i);
+                    if (i === rbfTerm) balance = 0;
+                }
+                rbfData.push({ month: i, move, principal, interest, balance, cumInterest: rbfCumInterest });
+                rbfTableBody.innerHTML += `<tr class="${i === rbfTerm ? 'highlight-row font-bold' : ''}">
+                    <td class="font-bold">月${i}</td>
+                    <td class="${move < 0 ? 'text-red-500' : 'text-emerald-600'} font-bold">${move !== 0 ? (move > 0 ? '+' : '') + formatNum(move) : '0'}</td>
+                    <td>${principal !== 0 ? formatNum(principal) : '0'}</td>
+                    <td class="text-blue-600 font-bold">${interest !== 0 ? formatNum(interest) : '0'}</td>
+                    <td>${formatNum(Math.max(0, balance))}</td>
+                </tr>`;
+            }
+            document.getElementById('rbfTotalProfit').innerText = formatNum(rbfCumInterest) + '万';
+
+            // --- Maegari Data ---
+            const maegariData = [];
+            let maegariCumInterest = 0;
+            const monthlyInterest = provision * (maegariRate / 100) / 12;
+            const maegariTableBody = document.getElementById('maegariTableBody');
+            maegariTableBody.innerHTML = '';
+            for (let i = 0; i <= 12; i++) {
+                let move = 0, principal = 0, interest = 0, balance = provision;
+                if (i === 0) { move = -provision; }
+                else {
+                    interest = monthlyInterest;
+                    maegariCumInterest += interest;
+                    if (i === 12) { move = provision + monthlyInterest; principal = provision; balance = 0; }
+                    else { move = monthlyInterest; }
+                }
+                maegariData.push({ month: i, move, principal, interest, balance, cumInterest: maegariCumInterest });
+                maegariTableBody.innerHTML += `<tr class="${i === 12 ? 'highlight-row font-bold' : ''}">
+                    <td class="font-bold">月${i}</td>
+                    <td class="${move < 0 ? 'text-red-500' : 'text-emerald-600'} font-bold">${(move > 0 ? '+' : '') + formatNum(move)}</td>
+                    <td>${principal !== 0 ? formatNum(principal) : '0'}</td>
+                    <td class="text-teal-600 font-bold">${interest !== 0 ? formatNum(interest) : '0'}</td>
+                    <td>${formatNum(balance)}</td>
+                </tr>`;
+            }
+            document.getElementById('maegariTotalProfit').innerText = formatNum(maegariCumInterest) + '万';
+
+            // --- Factoring Data ---
+            const factoringData = [];
+            let factoringCumInterest = 0;
+            const discountAmount = provision * (factoringRate / 100);
+            const investmentPerCycle = provision - discountAmount;
+            const factoringTableBody = document.getElementById('factoringTableBody');
+            factoringTableBody.innerHTML = '';
+            
+            // Freq based timing
+            const cycles = [];
+            if (factoringFreq >= 1) cycles.push(0);
+            if (factoringFreq >= 2) cycles.push(6);
+            if (factoringFreq >= 3) cycles.push(3);
+            if (factoringFreq >= 4) cycles.push(9);
+            if (factoringFreq >= 5) cycles.push(1);
+            if (factoringFreq >= 6) cycles.push(10);
+            cycles.sort((a,b) => a-b);
+
+            for (let i = 0; i <= 12; i++) {
+                let move = 0, principal = 0, interest = 0, balance = 0;
+                
+                // Simple logic for 1-6 times
+                const interval = Math.floor(12 / factoringFreq);
+                const isActionMonth = (i % interval === 0) && (i < 12);
+                const isRecoveryMonth = (i > 0 && (i - 2) % interval === 0) || (i === (12/factoringFreq)*factoringFreq && i > 0);
+                
+                // Redo simplified for clearer 2rd param request
+                let currentBalance = 0;
+                for(let c=0; c<factoringFreq; c++) {
+                    let start = c * Math.max(2, Math.floor(12/factoringFreq));
+                    let end = start + 2;
+                    if (i >= start && i < end) currentBalance = provision;
+                    if (i === start) move -= investmentPerCycle;
+                    if (i === end && i <= 12) { move += provision; principal = investmentPerCycle; interest = discountAmount; factoringCumInterest += interest; currentBalance = 0;}
+                }
+                balance = currentBalance;
+
+                factoringData.push({ month: i, move, principal, interest, balance, cumInterest: factoringCumInterest });
+                factoringTableBody.innerHTML += `<tr class="${(principal > 0) ? 'highlight-row font-bold' : ''}">
+                    <td class="font-bold">月${i}</td>
+                    <td class="${move < 0 ? 'text-red-500' : 'text-emerald-600'} font-bold">${move !== 0 ? (move > 0 ? '+' : '') + formatNum(move) : '0'}</td>
+                    <td>${principal !== 0 ? formatNum(principal) : '0'}</td>
+                    <td class="text-amber-600 font-bold">${interest !== 0 ? formatNum(interest) : '0'}</td>
+                    <td>${formatNum(balance)}</td>
+                </tr>`;
+            }
+            document.getElementById('factoringTotalProfit').innerText = formatNum(factoringCumInterest) + '万';
+
+            // --- Early Settlement Data ---
+            const earlyData = [];
+            let earlyCumInterest = 0;
+            const monthlyFee = provision * (earlyRate / 100);
+            const earlyTableBody = document.getElementById('earlyTableBody');
+            earlyTableBody.innerHTML = '';
+            for (let i = 0; i <= 12; i++) {
+                let move = 0, principal = 0, interest = 0, balance = provision;
+                if (i === 0) { move = -(provision - monthlyFee); }
+                else {
+                    interest = monthlyFee;
+                    earlyCumInterest += interest;
+                    move = monthlyFee;
+                }
+                earlyData.push({ month: i, move, principal, interest, balance, cumInterest: earlyCumInterest });
+                earlyTableBody.innerHTML += `<tr>
+                    <td class="font-bold">月${i}</td>
+                    <td class="${move < 0 ? 'text-red-500' : 'text-emerald-600'} font-bold">${(move > 0 ? '+' : '') + formatNum(move)}</td>
+                    <td>0</td>
+                    <td class="text-emerald-600 font-bold">${interest !== 0 ? formatNum(interest) : '0'}</td>
+                    <td>${formatNum(balance)}</td>
+                </tr>`;
+            }
+            document.getElementById('earlyTotalProfit').innerText = formatNum(earlyCumInterest) + '万';
+
+            // --- Update Charts ---
+            updateChart(charts.rbf, rbfData);
+            updateChart(charts.maegari, maegariData);
+            updateChart(charts.factoring, factoringData);
+            updateChart(charts.early, earlyData);
+            
+            charts.summary.data.datasets[0].data = rbfData.map(d => d.cumInterest);
+            charts.summary.data.datasets[1].data = maegariData.map(d => d.cumInterest);
+            charts.summary.data.datasets[2].data = factoringData.map(d => d.cumInterest);
+            charts.summary.data.datasets[3].data = earlyData.map(d => d.cumInterest);
+            charts.summary.update();
+        };
+
+        const updateChart = (chart, data) => {
+            chart.data.datasets[0].data = data.map(d => d.balance);
+            chart.data.datasets[1].data = data.map(d => d.principal);
+            chart.data.datasets[2].data = data.map(d => d.interest);
+            chart.update();
+        };
+
+        const createStandardChart = (ctx, colors) => {
+            return new Chart(ctx, {
+                data: {
+                    labels: Array.from({length: 13}, (_, i) => `月${i}`),
+                    datasets: [
+                        { type: 'line', label: '貸付残高', data: [], borderColor: colors.line, borderWidth: 4, pointRadius: 4, yAxisID: 'y_balance', tension: 0, zIndex: 10 },
+                        { type: 'bar', label: '元本回収', data: [], backgroundColor: colors.principal, yAxisID: 'y_recovery', stack: 'recovery' },
+                        { type: 'bar', label: '利息回収', data: [], backgroundColor: colors.interest, yAxisID: 'y_recovery', stack: 'recovery' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        y_balance: { type: 'linear', position: 'left', min: 0, max: 1200, grid: { color: '#334155' } },
+                        y_recovery: { type: 'linear', position: 'right', min: 0, max: 1100, grid: { display: false } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { legend: { position: 'top', labels: { color: '#fff', boxWidth: 10, font: { size: 10 } } } }
+                }
+            });
+        };
+
+        // Init
+        charts.rbf = createStandardChart(document.getElementById('rbfChart'), { line: '#3b82f6', principal: '#2563eb', interest: '#60a5fa' });
+        charts.maegari = createStandardChart(document.getElementById('maegariChart'), { line: '#14b8a6', principal: '#0d9488', interest: '#2dd4bf' });
+        charts.factoring = createStandardChart(document.getElementById('factoringChart'), { line: '#f59e0b', principal: '#d97706', interest: '#fbbf24' });
+        charts.early = createStandardChart(document.getElementById('earlyChart'), { line: '#10b981', principal: '#059669', interest: '#34d399' });
+
+        charts.summary = new Chart(document.getElementById('summaryChart'), {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 13}, (_, i) => `月${i}`),
+                datasets: [
+                    { label: 'RBF', data: [], borderColor: '#3b82f6', borderWidth: 4, tension: 0.1 },
+                    { label: '前借り君', data: [], borderColor: '#14b8a6', borderWidth: 4, tension: 0.1 },
+                    { label: 'ファクタリング', data: [], borderColor: '#f59e0b', borderWidth: 4, stepped: true },
+                    { label: '早期払い', data: [], borderColor: '#10b981', borderWidth: 4, tension: 0.1 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: '#fff', padding: 20 } } },
+                scales: {
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        ['rbfRateSlider', 'rbfTermSlider', 'maegariRateSlider', 'factoringRateSlider', 'factoringFreqSlider', 'earlyRateSlider'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateAll);
+        });
+
+        updateAll();
+    </script>
+</body>
+</html>

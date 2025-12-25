@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前借り君 vs RBF 徹底比較シミュレーション</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            width: 100%;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Hero Section -->
+    <header class="gradient-bg text-white py-24 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight">「前借り君」実現へのロードマップ</h1>
+            <p class="text-xl md:text-2xl text-slate-300 mb-8">RBF vs 早期払い vs 前借り君：返済タイムラインと適法性を徹底比較</p>
+            <div class="flex justify-center gap-4">
+                <a href="#comparison" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition">図解を見る</a>
+                <a href="#legality" class="bg-slate-700 hover:bg-slate-600 text-white px-8 py-3 rounded-full font-bold transition">適法性を確認</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Key Concept Section -->
+    <section class="py-20 px-6 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-6 font-bold text-xl">1</div>
+                <h3 class="text-xl font-bold mb-4">RBF (Revenue Based)</h3>
+                <p class="text-slate-600">売上に連動して「元本＋手数料」を早期に回収。6ヶ月程度で完結する短期決戦型。</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-6 font-bold text-xl">2</div>
+                <h3 class="text-xl font-bold mb-4">早期払い (入金前倒し)</h3>
+                <p class="text-slate-600">貸付ではなく「入金のタイミング」を早めるだけ。リスクが低く、シンプル。</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center mb-6 font-bold text-xl">3</div>
+                <h3 class="text-xl font-bold mb-4">前借り君 (利息のみ)</h3>
+                <p class="text-slate-600">元本は据え置き。毎月「利息」のみを回収し続ける、LTV重視の長期安定型。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Comparison Section -->
+    <section id="comparison" class="py-20 bg-slate-100 px-6">
+        <div class="max-w-6xl mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">一目でわかる！返済タイムライン</h2>
+            <p class="text-slate-600 text-lg">1,000万円を提供した場合のシミュレーション</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <!-- Cash Flow Chart -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-blue-600 mr-3"></span>
+                    月次回収額の比較 (貸主視点)
+                </h3>
+                <div class="chart-container">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+                <div class="mt-6 text-sm text-slate-500 italic text-center">
+                    RBFはドカンと回収、前借り君はチョロチョロと安定回収
+                </div>
+            </div>
+
+            <!-- Balance Chart -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-amber-600 mr-3"></span>
+                    未回収残高の推移
+                </h3>
+                <div class="chart-container">
+                    <canvas id="balanceChart"></canvas>
+                </div>
+                <div class="mt-6 text-sm text-slate-500 italic text-center">
+                    前借り君は「元本が減らない」ため、出口戦略が鍵
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legality Section -->
+    <section id="legality" class="py-24 px-6 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">上場会社としての適法性クリア</h2>
+            <div class="inline-block h-1 w-20 bg-blue-600"></div>
+        </div>
+
+        <div class="bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+            <div class="p-10">
+                <div class="flex items-start gap-6 mb-10">
+                    <div class="bg-blue-600 text-white p-4 rounded-2xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2">結論：適法に実現可能です</h3>
+                        <p class="text-slate-600 text-lg">
+                            前借り君（利息のみ返済型）は、既存の「バルーンローン」や「据置期間付き貸付」と同じ法的枠組みです。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-blue-600 mb-3">必須：貸金業登録</h4>
+                        <p class="text-slate-600 text-sm">元本を交付し利息を得る行為は「貸付」です。上場会社の信用力で登録を取得・維持することが大前提となります。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-blue-600 mb-3">厳守：利息制限法</h4>
+                        <p class="text-slate-600 text-sm">年利15%〜20%の枠内での設計。手数料名目であっても実質利息とみなされるため、クリーンな設計が求められます。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-blue-600 mb-3">禁止：永久不換の表現</h4>
+                        <p class="text-slate-600 text-sm">「永久に返さなくて良い」という誤認を与える表現はNG。必ず更新期限や満期設定が必要です。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-blue-600 mb-3">重要：出口設計</h4>
+                        <p class="text-slate-600 text-sm">満期時の一括返済、または借換審査。借り手の返済能力に応じた柔軟な出口オプションを用意します。</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="bg-blue-50 p-6 text-center text-blue-800 font-medium">
+                「利息のみ支払い」＝「使用料だけ払うタイプ」という明快な説明でコンプライアンスを担保
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table Section -->
+    <section class="py-20 bg-slate-900 text-white px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-12 text-center">経営陣向け：3モデル最終比較</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700">
+                            <th class="py-4 px-6 text-slate-400 font-medium">評価項目</th>
+                            <th class="py-4 px-6 text-blue-400 font-bold">RBF</th>
+                            <th class="py-4 px-6 text-emerald-400 font-bold">早期払い</th>
+                            <th class="py-4 px-6 text-amber-400 font-bold">前借り君</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr>
+                            <td class="py-6 px-6 font-medium">月次回収額</td>
+                            <td class="py-6 px-6">大きい (元本+手数料)</td>
+                            <td class="py-6 px-6">なし (入金のみ)</td>
+                            <td class="py-6 px-6 text-amber-300">小さい (利息のみ)</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-6 font-medium">回収期間</td>
+                            <td class="py-6 px-6">短期 (約6ヶ月)</td>
+                            <td class="py-6 px-6">即時</td>
+                            <td class="py-6 px-6 text-amber-300">中〜長期 (更新制)</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-6 font-medium">元本の扱い</td>
+                            <td class="py-6 px-6 text-blue-300">毎月減る</td>
+                            <td class="py-6 px-6">元本という概念なし</td>
+                            <td class="py-6 px-6 text-red-400">減らない (据置)</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-6 font-medium">収益の質</td>
+                            <td class="py-6 px-6">フロー型 (回転重視)</td>
+                            <td class="py-6 px-6">手数料型</td>
+                            <td class="py-6 px-6 text-amber-300">ストック型 (LTV重視)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <footer class="py-24 px-6 text-center">
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-white p-12 rounded-3xl shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6">役員会への提言</h2>
+                <p class="text-slate-600 text-lg mb-10 leading-relaxed">
+                    前借り君は「回収タイミングの読みやすさ」において最強ですが、「元本が戻らない」ことへの制度的ケアが必要です。貸金業登録を前提とした、クリーンなストック収益モデルとして推進すべきです。
+                </p>
+                <button onclick="window.print()" class="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-slate-800 transition">
+                    この資料を印刷・保存する
+                </button>
+            </div>
+            <p class="mt-12 text-slate-400 text-sm">© 2025 Maekari-kun Strategy Paper - Internal Use Only</p>
+        </div>
+    </footer>
+
+    <script>
+        const ctxCash = document.getElementById('cashFlowChart').getContext('2d');
+        const ctxBalance = document.getElementById('balanceChart').getContext('2d');
+
+        const labels = ['月0', '月1', '月2', '月3', '月4', '月5', '月6'];
+
+        // Cash Flow Chart (Monthly Recovery Amount)
+        new Chart(ctxCash, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'RBF (元本167万 + 手数料16万)',
+                        data: [0, 183, 183, 183, 183, 183, 183],
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderRadius: 6,
+                    },
+                    {
+                        label: '前借り君 (利息10万)',
+                        data: [0, 10, 10, 10, 10, 10, 10],
+                        backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                        borderRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: '回収額 (万円)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Balance Chart (Remaining Unrecovered Amount)
+        new Chart(ctxBalance, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'RBF 残高',
+                        data: [1000, 833, 666, 499, 332, 165, 0],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 5
+                    },
+                    {
+                        label: '前借り君 残高',
+                        data: [1000, 1000, 1000, 1000, 1000, 1000, 1000],
+                        borderColor: '#f59e0b',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0,
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1200,
+                        title: { display: true, text: '残高 (万円)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

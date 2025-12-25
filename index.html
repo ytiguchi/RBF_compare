@@ -245,6 +245,7 @@
         .input-group input[type="number"]:focus { outline: none; border-color: #3b82f6; }
         .input-group input[type="range"] {
             -webkit-appearance: none;
+            appearance: none;
             height: 8px;
             background: #e2e8f0;
             border-radius: 4px;
@@ -252,6 +253,7 @@
         }
         .input-group input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
+            appearance: none;
             width: 20px;
             height: 20px;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
@@ -270,7 +272,7 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
         }
-        .result-card.best { border-color: #34d399; }
+        .result-card.best { border-color: #34d399; border-width: 2px; }
         .result-card.best::after {
             content: "BEST";
             position: absolute;
@@ -283,15 +285,52 @@
             padding: 4px 40px;
             transform: rotate(45deg);
         }
-        .result-card h4 { font-size: 0.9rem; color: #64748b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .result-amount { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+        
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .rbf-badge { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+        .early-badge { background: rgba(34, 197, 94, 0.1); color: #16a34a; }
+        .factoring-badge { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+        
+        .param-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .param-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+        .param-row:not(:last-child) { border-bottom: 1px dashed #e2e8f0; }
+        .param-label { font-size: 0.8rem; color: #64748b; }
+        .param-value { font-size: 0.95rem; font-weight: 700; color: #0f172a; }
+        
+        .result-main { text-align: center; padding: 16px 0; }
+        .result-amount { font-size: 2.4rem; font-weight: 800; margin-bottom: 4px; }
         .result-card.rbf-card .result-amount { color: #3b82f6; }
         .result-card.early-card .result-amount { color: #22c55e; }
         .result-card.factoring-card .result-amount { color: #f59e0b; }
         .result-detail { font-size: 0.85rem; color: #64748b; }
+        
         .result-breakdown { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
-        .breakdown-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; }
+        .breakdown-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; }
         .breakdown-row .label { color: #64748b; }
+        .breakdown-row.highlight { background: #f0fdf4; margin: 0 -24px; padding: 10px 24px; border-radius: 0; }
+        .rbf-card .breakdown-row.highlight { background: rgba(59, 130, 246, 0.05); }
+        .early-card .breakdown-row.highlight { background: rgba(34, 197, 94, 0.05); }
+        .factoring-card .breakdown-row.highlight { background: rgba(245, 158, 11, 0.05); }
         
         .sim-charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .sim-chart-card {
@@ -394,13 +433,13 @@
         </div>
         
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="showTab('products')">📊 商品詳細</button>
-            <button class="tab-btn" onclick="showTab('simulation')">🧮 シミュレーション</button>
+            <button class="tab-btn active" onclick="showTab('simulation')">🧮 シミュレーション</button>
+            <button class="tab-btn" onclick="showTab('products')">📊 商品詳細</button>
             <button class="tab-btn" onclick="showTab('timeline')">📅 回収スケジュール</button>
         </div>
         
         <!-- Products Tab - Enhanced -->
-        <div id="products" class="tab-content active">
+        <div id="products" class="tab-content">
             
             <!-- RBF Detail -->
             <div class="product-detail-section">
@@ -491,20 +530,20 @@
                 </div>
             </div>
             
-            <!-- 精算前倒し Detail -->
+            <!-- 早期払い Detail -->
             <div class="product-detail-section">
                 <div class="product-hero early">
                     <div class="product-main">
                         <div class="product-header">
                             <div class="product-icon">⚡</div>
                             <div>
-                                <div class="product-title">精算前倒しオプション</div>
+                                <div class="product-title">早期払いオプション</div>
                                 <div class="product-subtitle">Early Settlement Option</div>
                             </div>
                         </div>
                         <p class="product-description">
-                            サブスクペイ加盟店のカード売上を1ヶ月前倒しで立替払いし、翌月のカード精算時に回収。
-                            上乗せ手数料として売上の0.5-2%を獲得。短期回収・低リスクで安定した収益が見込める。
+                            サブスクペイ加盟店のカード売上を即日払い（ゼロサイト）で提供し、翌月のカード精算時に回収。
+                            上乗せ手数料として売上の0.5-2%を獲得。立替不要・短期回収・低リスクで安定した収益が見込める。
                         </p>
                         <div class="product-stats">
                             <div class="stat-box">
@@ -512,7 +551,7 @@
                                 <div class="stat-label">上乗せ手数料</div>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-value">1ヶ月</div>
+                                <div class="stat-value">即日→翌月</div>
                                 <div class="stat-label">回収サイクル</div>
                             </div>
                             <div class="stat-box">
@@ -538,8 +577,8 @@
                         <div class="stat-box" style="flex:1;">
                             <div class="stat-label" style="margin-bottom: 12px;">回収の仕組み</div>
                             <p style="font-size: 0.9rem; color: #475569; text-align: left;">
-                                ・カード売上を先払い（立替）<br>
-                                ・翌月カード精算時に自動回収<br>
+                                ・カード売上を即日払い（ゼロサイト）<br>
+                                ・立替なし：翌月カード精算時に回収<br>
                                 ・カード会社経由で確実に回収
                             </p>
                         </div>
@@ -550,8 +589,8 @@
                     <div class="feature-card">
                         <h4>✅ メリット</h4>
                         <ul class="feature-list">
-                            <li><span class="icon check">✓</span>1ヶ月で確実に回収</li>
-                            <li><span class="icon check">✓</span>カード会社経由で低リスク</li>
+                            <li><span class="icon check">✓</span>翌月カード精算で確実回収</li>
+                            <li><span class="icon check">✓</span>立替不要（ゼロサイト払い）</li>
                             <li><span class="icon check">✓</span>毎月安定した収益</li>
                             <li><span class="icon check">✓</span>審査不要（既存加盟店）</li>
                             <li><span class="icon check">✓</span>オペレーション自動化</li>
@@ -669,13 +708,13 @@
             </div>
             
             <!-- Comparison Table -->
-            <div class="comparison-table">
+            <div class=\"comparison-table\">
                 <table>
                     <thead>
                         <tr>
                             <th>比較項目</th>
                             <th class="product-col rbf-col">RBF</th>
-                            <th class="product-col early-col">精算前倒し</th>
+                            <th class="product-col early-col">早期払い</th>
                             <th class="product-col factoring-col">ファクタリング</th>
                         </tr>
                     </thead>
@@ -689,7 +728,7 @@
                         <tr>
                             <td><strong>回収期間</strong></td>
                             <td style="text-align:center;">3-12ヶ月</td>
-                            <td style="text-align:center;">1ヶ月</td>
+                            <td style="text-align:center;">翌月（即日払い）</td>
                             <td style="text-align:center;">1-3ヶ月</td>
                         </tr>
                         <tr>
@@ -743,7 +782,7 @@
         </div>
         
         <!-- Simulation Tab -->
-        <div id="simulation" class="tab-content">
+        <div id="simulation" class="tab-content active">
             <div class="sim-container">
                 <div class="sim-panel">
                     <h3>⚙️ パラメーター設定</h3>
@@ -771,9 +810,9 @@
                         <div class="range-labels"><span>3ヶ月</span><span>12ヶ月</span></div>
                     </div>
                     <div class="input-group">
-                        <label>精算前倒し 上乗せ手数料（%）</label>
-                        <input type="number" id="simEarlyCard" value="0.8" step="0.1" min="0.5" max="2" onchange="updateSimulation()">
-                        <input type="range" min="0.5" max="2" value="0.8" step="0.1" id="simEarlyCardRange" oninput="document.getElementById('simEarlyCard').value = this.value; updateSimulation();">
+                        <label>早期払い 上乗せ手数料（%）</label>
+                        <input type="number" id="simEarlyCard" value="0.5" step="0.1" min="0.5" max="2" onchange="updateSimulation()">
+                        <input type="range" min="0.5" max="2" value="0.5" step="0.1" id="simEarlyCardRange" oninput="document.getElementById('simEarlyCard').value = this.value; updateSimulation();">
                         <div class="range-labels"><span>0.5%</span><span>2.0%</span></div>
                     </div>
                     <div class="input-group">
@@ -792,34 +831,87 @@
                 
                 <div class="sim-results">
                     <div class="result-cards-grid">
+                        <!-- RBF Card -->
                         <div class="result-card rbf-card">
-                            <h4><span style="color: #3b82f6;">●</span> RBF</h4>
-                            <div class="result-amount" id="rbfTotalCost">¥1,000,000</div>
-                            <div class="result-detail">年間手数料収入</div>
+                            <div class="card-badge rbf-badge">📈 RBF</div>
+                            <div class="param-section">
+                                <div class="param-row">
+                                    <span class="param-label">手数料率</span>
+                                    <span class="param-value" id="rbfRateDisplay">10%</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">回収期間</span>
+                                    <span class="param-value" id="rbfPeriodDisplay">6ヶ月</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">年間利用</span>
+                                    <span class="param-value" id="rbfFreqDisplay">1回</span>
+                                </div>
+                            </div>
+                            <div class="result-main">
+                                <div class="result-amount" id="rbfTotalCost">¥1,000,000 /年</div>
+                                <div class="result-detail">年間手数料収入</div>
+                            </div>
                             <div class="result-breakdown">
                                 <div class="breakdown-row"><span class="label">提供額</span><span id="rbfPrincipal">¥10,000,000</span></div>
-                                <div class="breakdown-row"><span class="label">手数料収入/回</span><span id="rbfFee">¥1,000,000</span></div>
-                                <div class="breakdown-row"><span class="label">年換算利回り</span><span id="rbfApr">-</span></div>
+                                <div class="breakdown-row"><span class="label">手数料/回</span><span id="rbfFee">¥1,000,000</span></div>
+                                <div class="breakdown-row highlight"><span class="label">年換算利回り</span><span id="rbfApr">-</span></div>
                             </div>
                         </div>
+                        
+                        <!-- 早期払い Card -->
                         <div class="result-card early-card">
-                            <h4><span style="color: #10b981;">●</span> 精算前倒し</h4>
-                            <div class="result-amount" id="earlyTotalCost">¥960,000</div>
-                            <div class="result-detail">年間手数料収入</div>
+                            <div class="card-badge early-badge">⚡ 早期払い</div>
+                            <div class="param-section">
+                                <div class="param-row">
+                                    <span class="param-label">上乗せ率</span>
+                                    <span class="param-value" id="earlyRateDisplay">0.5%</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">支払サイト</span>
+                                    <span class="param-value">0日（即日）</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">回収</span>
+                                    <span class="param-value">翌月カード精算</span>
+                                </div>
+                            </div>
+                            <div class="result-main">
+                                <div class="result-amount" id="earlyTotalCost">¥600,000 /年</div>
+                                <div class="result-detail">年間手数料収入</div>
+                            </div>
                             <div class="result-breakdown">
                                 <div class="breakdown-row"><span class="label">月商</span><span id="earlyMonthlySales">¥10,000,000</span></div>
-                                <div class="breakdown-row"><span class="label">月次手数料</span><span id="earlyMonthlyFee">¥80,000</span></div>
-                                <div class="breakdown-row"><span class="label">年換算利回り</span><span id="earlyApr">-</span></div>
+                                <div class="breakdown-row"><span class="label">月次手数料</span><span id="earlyMonthlyFee">¥50,000</span></div>
+                                <div class="breakdown-row highlight"><span class="label">年換算利回り</span><span id="earlyApr">-</span></div>
                             </div>
                         </div>
+                        
+                        <!-- ファクタリング Card -->
                         <div class="result-card factoring-card">
-                            <h4><span style="color: #f59e0b;">●</span> ファクタリング</h4>
-                            <div class="result-amount" id="factTotalCost">¥1,000,000</div>
-                            <div class="result-detail">手数料収入（単発）</div>
+                            <div class="card-badge factoring-badge">🏦 ファクタリング</div>
+                            <div class="param-section">
+                                <div class="param-row">
+                                    <span class="param-label">手数料率</span>
+                                    <span class="param-value" id="factRateDisplay">10%</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">回収サイト</span>
+                                    <span class="param-value" id="factSiteDisplay">2ヶ月</span>
+                                </div>
+                                <div class="param-row">
+                                    <span class="param-label">利用</span>
+                                    <span class="param-value">単発</span>
+                                </div>
+                            </div>
+                            <div class="result-main">
+                                <div class="result-amount" id="factTotalCost">¥1,000,000</div>
+                                <div class="result-detail">手数料収入（単発）</div>
+                            </div>
                             <div class="result-breakdown">
                                 <div class="breakdown-row"><span class="label">買取額</span><span id="factPrincipal">¥10,000,000</span></div>
                                 <div class="breakdown-row"><span class="label">支払額</span><span id="factReceive">¥9,000,000</span></div>
-                                <div class="breakdown-row"><span class="label">年換算利回り</span><span id="factApr">-</span></div>
+                                <div class="breakdown-row highlight"><span class="label">年換算利回り</span><span id="factApr">-</span></div>
                             </div>
                         </div>
                     </div>
@@ -847,9 +939,9 @@
                     <div class="summary-sub">回収期間</div>
                 </div>
                 <div class="summary-card early">
-                    <h4><span style="color: #10b981;">●</span> 精算前倒し</h4>
-                    <div class="summary-value">1ヶ月</div>
-                    <div class="summary-sub">立替→翌月回収</div>
+                    <h4><span style="color: #10b981;">●</span> 早期払い</h4>
+                    <div class="summary-value">即日払い</div>
+                    <div class="summary-sub">0サイト→翌月回収</div>
                 </div>
                 <div class="summary-card factoring">
                     <h4><span style="color: #f59e0b;">●</span> ファクタリング</h4>
@@ -858,7 +950,7 @@
                 </div>
             </div>
             
-            <div class="timeline-container">
+            <div class=\"timeline-container\">
                 <div class="timeline-title">📊 月別回収スケジュール</div>
                 <div class="timeline-header" id="timelineHeader"></div>
                 <div class="timeline-row" id="timelineRbf"></div>
@@ -922,10 +1014,10 @@
                     return `<div class="timeline-cell"><div class="timeline-bar empty">完了</div></div>`;
                 }).join('');
             
-            earlyRow.innerHTML = `<div class="timeline-label early"><span class="dot"></span>精算前倒し</div>` +
+            earlyRow.innerHTML = `<div class="timeline-label early"><span class="dot"></span>早期払い</div>` +
                 months.map((_, i) => {
-                    if (i === 0) return `<div class="timeline-cell"><div class="timeline-bar early-bar">立替<br>${fmt(AMOUNT)}</div></div>`;
-                    if (i === 1) return `<div class="timeline-cell"><div class="timeline-bar early-bar">回収<br>${fmt(AMOUNT)}</div></div>`;
+                    if (i === 0) return `<div class="timeline-cell"><div class="timeline-bar early-bar">即日払い<br>${fmt(AMOUNT)}</div></div>`;
+                    if (i === 1) return `<div class="timeline-cell"><div class="timeline-bar early-bar">カード回収<br>${fmt(AMOUNT)}</div></div>`;
                     return `<div class="timeline-cell"><div class="timeline-bar empty">-</div></div>`;
                 }).join('');
             
@@ -947,7 +1039,7 @@
                 charts.fee = new Chart(feeCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['RBF', '精算前倒し', 'ファクタリング'],
+                        labels: ['RBF', '早期払い', 'ファクタリング'],
                         datasets: [
                             { label: '最低', data: [8, 0.5, 2], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'], borderRadius: 8 },
                             { label: '最高', data: [12, 2, 18], backgroundColor: ['rgba(59,130,246,0.4)', 'rgba(16,185,129,0.4)', 'rgba(245,158,11,0.4)'], borderRadius: 8 }
@@ -969,7 +1061,7 @@
                 charts.period = new Chart(periodCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['RBF', '精算前倒し', 'ファクタリング'],
+                        labels: ['RBF', '早期払い', 'ファクタリング'],
                         datasets: [{ label: '回収期間（月）', data: [6, 1, 2], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'], borderRadius: 8 }]
                     },
                     options: {
@@ -1026,16 +1118,25 @@
             
             const fmt = v => isFinite(v) ? v.toFixed(1).replace(/\.0$/, '') + '%' : '-';
             
+            // RBF パラメータ＆結果
+            document.getElementById('rbfRateDisplay').textContent = rbfRate + '%';
+            document.getElementById('rbfPeriodDisplay').textContent = period + 'ヶ月';
+            document.getElementById('rbfFreqDisplay').textContent = rbfFreq + '回';
             document.getElementById('rbfTotalCost').textContent = '¥' + rbfAnnual.toLocaleString() + ' /年';
             document.getElementById('rbfPrincipal').textContent = '¥' + AMOUNT.toLocaleString();
             document.getElementById('rbfFee').textContent = '¥' + rbfFee.toLocaleString();
             document.getElementById('rbfApr').textContent = fmt(lenderRbfIrr);
             
+            // 早期払い パラメータ＆結果
+            document.getElementById('earlyRateDisplay').textContent = earlyCard + '%';
             document.getElementById('earlyTotalCost').textContent = '¥' + Math.round(earlyAnnual).toLocaleString() + ' /年';
             document.getElementById('earlyMonthlySales').textContent = '¥' + AMOUNT.toLocaleString();
             document.getElementById('earlyMonthlyFee').textContent = '¥' + Math.round(earlyMonthly).toLocaleString();
             document.getElementById('earlyApr').textContent = fmt(lenderEarlyIrr);
             
+            // ファクタリング パラメータ＆結果
+            document.getElementById('factRateDisplay').textContent = factRate + '%';
+            document.getElementById('factSiteDisplay').textContent = factSite + 'ヶ月';
             document.getElementById('factTotalCost').textContent = '¥' + factFee.toLocaleString();
             document.getElementById('factPrincipal').textContent = '¥' + AMOUNT.toLocaleString();
             document.getElementById('factReceive').textContent = '¥' + factCash.toLocaleString();
@@ -1059,7 +1160,7 @@
                 charts.cost = new Chart(costCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['RBF', '精算前倒し', 'ファクタリング'],
+                        labels: ['RBF', '早期払い', 'ファクタリング'],
                         datasets: [{ label: '手数料収入', data: [rbfAnnual, earlyAnnual, factFee], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'], borderRadius: 8 }]
                     },
                     options: {
@@ -1079,7 +1180,7 @@
                 charts.eff = new Chart(effCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['RBF', '精算前倒し', 'ファクタリング'],
+                        labels: ['RBF', '早期払い', 'ファクタリング'],
                         datasets: [{ label: '年率利回り', data: [lenderRbfIrr ?? 0, lenderEarlyIrr ?? 0, lenderFactIrr ?? 0], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'], borderRadius: 6 }]
                     },
                     options: {
