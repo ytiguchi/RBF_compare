@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>借り手の感情比較（別章） | 株式会社ロボットペイメント</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 28px 18px 56px; }
+    .badge { display:inline-flex; align-items:center; padding: 2px 10px; border-radius: 9999px; font-weight: 900; font-size: 12px; border: 1px solid rgba(15,23,42,.15); }
+    .card { background:#fff; border:1px solid rgba(15,23,42,.12); border-radius: 18px; box-shadow: 0 8px 24px rgba(15,23,42,.06); }
+    .kpi { font-weight: 900; letter-spacing: -0.02em; }
+    .grid-table { width:100%; border-collapse: separate; border-spacing:0; font-size: 13px; }
+    .grid-table th { position: sticky; top: 0; background: #f8fafc; z-index: 2; text-align:left; padding: 10px 10px; border-bottom: 2px solid rgba(15,23,42,.10); }
+    .grid-table td { padding: 10px 10px; border-bottom: 1px solid rgba(15,23,42,.08); vertical-align: top; }
+    .score { font-weight: 900; }
+    .score.pill { padding: 2px 10px; border-radius: 9999px; display:inline-block; }
+    .s-gg { background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; }
+    .s-g  { background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; }
+    .s-n  { background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; }
+    .s-b  { background:#fef2f2; border:1px solid #fecaca; color:#7f1d1d; }
+    .muted { color: rgba(15,23,42,.62); }
+    .callout { border-left: 4px solid #0f172a; background: #f8fafc; }
+    .small { font-size: 12px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <div class="container">
+    <header class="mb-6">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div class="text-slate-700 font-black tracking-tight">株式会社ロボットペイメント</div>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight mt-1">借り手の「感情」で比較（別章）</h1>
+          <div class="muted mt-2 small">貸主視点の定量比較とは独立に、借り手が感じる「簡単さ・早さ・返済の柔軟性・借金感の少なさ」で比較する。</div>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <span class="badge bg-white">軸: 借金感の少なさ（最重要）</span>
+          <span class="badge bg-white">ペルソナ: A 資金繰り / B 成長投資</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="card p-5 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="text-sm font-black text-slate-700">表示モード</div>
+          <div class="muted small">マトリクス（俯瞰）＋ストーリー（納得）を並べる</div>
+        </div>
+        <div class="flex gap-2">
+          <button id="modeMatrix" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-slate-900 text-white">マトリクス</button>
+          <button id="modeStory" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-white text-slate-900">ストーリー</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Matrix -->
+    <section id="matrixSection" class="card overflow-hidden mb-6">
+      <div class="p-5 border-b border-slate-200">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div class="text-sm font-black text-slate-700">図表① 感情マトリクス（俯瞰・1枚で比較）</div>
+            <div class="muted small mt-1">評価は「借り手の体感」。条件・説明・運用設計で上下する。</div>
+          </div>
+          <div class="text-right">
+            <div class="text-sm font-black text-slate-700">評価記号</div>
+            <div class="small muted mt-1">◎ 強い安心 / ○ 良い / △ 説明次第 / × 抵抗大</div>
+          </div>
+        </div>
+      </div>
+      <div class="p-0 overflow-auto">
+        <table class="grid-table min-w-[980px]">
+          <thead>
+            <tr>
+              <th class="w-[220px]">手段</th>
+              <th class="w-[150px]">簡単（手続き）</th>
+              <th class="w-[150px]">早い（入金体感）</th>
+              <th class="w-[150px]">返済が柔軟</th>
+              <th class="w-[220px]">借金感が少ない（最重要）</th>
+              <th>コメント（借り手の脳内）</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Story -->
+    <section id="storySection" class="hidden space-y-6">
+      <div class="card p-5">
+        <div class="text-sm font-black text-slate-700">図表② ペルソナA（資金繰りが苦しい）—導入前→導入後</div>
+        <div class="grid md:grid-cols-12 gap-4 mt-4">
+          <div class="md:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-black">導入前（不安）</div>
+            <ul class="mt-2 small muted space-y-1">
+              <li>- 月末が来るたびに資金が薄い</li>
+              <li>- 固定返済があると「返済日が怖い」</li>
+              <li>- 手続きが重いと間に合わない</li>
+            </ul>
+          </div>
+          <div class="md:col-span-2 flex items-center justify-center">
+            <div class="kpi text-3xl">→</div>
+          </div>
+          <div class="md:col-span-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+            <div class="font-black text-emerald-900">導入後（安心）</div>
+            <ul class="mt-2 small text-emerald-900/70 space-y-1">
+              <li>- 入金の見通しが立つ（早い）</li>
+              <li>- 手続きが短い（簡単）</li>
+              <li>- “借金っぽさ”が少ない説明ができる</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout mt-4 p-4 rounded-2xl">
+          <div class="font-black">刺さる順（仮）</div>
+          <div class="small muted mt-1">早期払い → ファクタリングロボ for SaaS → RBF →（将来）前借り君</div>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <div class="text-sm font-black text-slate-700">図表③ ペルソナB（成長投資したい）—導入前→導入後</div>
+        <div class="grid md:grid-cols-12 gap-4 mt-4">
+          <div class="md:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-black">導入前（焦り）</div>
+            <ul class="mt-2 small muted space-y-1">
+              <li>- 投資を前倒しできない（機会損失）</li>
+              <li>- 手続きが面倒だと着手が遅れる</li>
+              <li>- 固定返済で成長が鈍るのが怖い</li>
+            </ul>
+          </div>
+          <div class="md:col-span-2 flex items-center justify-center">
+            <div class="kpi text-3xl">→</div>
+          </div>
+          <div class="md:col-span-5 p-4 rounded-2xl bg-blue-50 border border-blue-200">
+            <div class="font-black text-blue-900">導入後（納得）</div>
+            <ul class="mt-2 small text-blue-900/70 space-y-1">
+              <li>- 初月にまとまった資金で投資できる</li>
+              <li>- 返済の納得感（柔軟性の説明）が通る</li>
+              <li>- 運用が簡単で本業に集中できる</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout mt-4 p-4 rounded-2xl">
+          <div class="font-black">刺さる順（仮）</div>
+          <div class="small muted mt-1">ファクタリングロボ for SaaS → RBF → 早期払い →（将来）前借り君</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card p-5">
+      <div class="text-sm font-black text-slate-700">図表④ 前借り君（将来オプション）—誤解防止の明記</div>
+      <div class="mt-3 p-4 rounded-2xl bg-amber-50 border border-amber-200">
+        <div class="font-black text-amber-900">重要</div>
+        <div class="small text-amber-900/80 mt-1">
+          前借り君（貸付）は、貸付スキームのため <span class="font-black">貸金業登録等の体制整備が前提</span>となります。<br/>
+          <span class="font-black">現時点で当社が提供できるメニューではありません</span>。本資料では、将来的なプロダクト候補として比較のために掲載しています。<br/>
+          （適法性・運用体制を確保した上で、段階的に検討します。）
+        </div>
+      </div>
+      <div class="mt-4 small muted">
+        “じゃあ何とかできないの？”への受け皿：適法性（スキーム/登録要否）→体制（審査/債権管理/回収）→運用の順で検討が必要。<br/>
+        当面は RBF / 早期払い / ファクタリングロボ for SaaS を提案可能。
+      </div>
+    </section>
+
+    <footer class="mt-10 pt-6 border-t border-slate-200 small muted">
+      参考：ファクタリングロボ for SaaS の説明（将来債権の現金化、請求代行、締め日から最短5営業日） —
+      <a class="font-black underline" href="https://www.robotpayment.co.jp/lan/factoring_robo/saas/" target="_blank" rel="noreferrer">公式ページ</a>
+    </footer>
+  </div>
+
+  <script>
+    const SCORES = {
+      '◎': { cls: 'score pill s-gg', label: '◎' },
+      '○': { cls: 'score pill s-g',  label: '○' },
+      '△': { cls: 'score pill s-n',  label: '△' },
+      '×': { cls: 'score pill s-b',  label: '×' }
+    };
+
+    const matrix = [
+      {
+        name: '早期払い',
+        simple: '◎',
+        fast: '◎',
+        flexible: '○',
+        debtFeel: '◎',
+        comment: '「毎月の入金が早いだけ。借金っぽくない」'
+      },
+      {
+        name: 'ファクタリングロボ for SaaS',
+        simple: '○',
+        fast: '◎',
+        flexible: '○',
+        debtFeel: '○',
+        comment: '「一括で入るのは強い。契約/請求の説明が長いと不安」'
+      },
+      {
+        name: 'RBF',
+        simple: '○',
+        fast: '○',
+        flexible: '◎',
+        debtFeel: '△',
+        comment: '「返済が柔軟は良い。理解できないと“結局借金？”」'
+      },
+      {
+        name: '前借り君（将来）',
+        simple: '△',
+        fast: '○',
+        flexible: '◎',
+        debtFeel: '×',
+        comment: '「“貸付”の文脈が出ると借金感が強い可能性」'
+      }
+    ];
+
+    const scoreCell = (s) => `<span class="${SCORES[s].cls}">${SCORES[s].label}</span>`;
+
+    const renderMatrix = () => {
+      const body = document.getElementById('matrixBody');
+      body.innerHTML = '';
+      matrix.forEach((r) => {
+        body.innerHTML += `
+          <tr>
+            <td class="font-black">${r.name}</td>
+            <td>${scoreCell(r.simple)}</td>
+            <td>${scoreCell(r.fast)}</td>
+            <td>${scoreCell(r.flexible)}</td>
+            <td>${scoreCell(r.debtFeel)}</td>
+            <td class="muted">${r.comment}</td>
+          </tr>
+        `;
+      });
+    };
+
+    const modeMatrixBtn = document.getElementById('modeMatrix');
+    const modeStoryBtn = document.getElementById('modeStory');
+    const matrixSection = document.getElementById('matrixSection');
+    const storySection = document.getElementById('storySection');
+
+    const setMode = (mode) => {
+      const isMatrix = mode === 'matrix';
+      matrixSection.classList.toggle('hidden', !isMatrix);
+      storySection.classList.toggle('hidden', isMatrix);
+      modeMatrixBtn.classList.toggle('bg-slate-900', isMatrix);
+      modeMatrixBtn.classList.toggle('text-white', isMatrix);
+      modeMatrixBtn.classList.toggle('bg-white', !isMatrix);
+      modeMatrixBtn.classList.toggle('text-slate-900', !isMatrix);
+      modeStoryBtn.classList.toggle('bg-slate-900', !isMatrix);
+      modeStoryBtn.classList.toggle('text-white', !isMatrix);
+      modeStoryBtn.classList.toggle('bg-white', isMatrix);
+      modeStoryBtn.classList.toggle('text-slate-900', isMatrix);
+    };
+
+    modeMatrixBtn.addEventListener('click', () => setMode('matrix'));
+    modeStoryBtn.addEventListener('click', () => setMode('story'));
+
+    renderMatrix();
+  </script>
+</body>
+</html>
+
+
