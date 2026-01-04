@@ -270,153 +270,85 @@
       </div>
     </section>
 
-    <!-- 図表② 提案フロー -->
+    <!-- 図表② 意思決定マトリクス -->
     <section class="card">
       <div class="card-header">
-        <h2><span class="num">2</span>提案フロー（意思決定の流れ）</h2>
-        <span class="small muted">借り手の「怖さ」→「対象」→「候補」の順で判断</span>
+        <h2><span class="num">2</span>推奨マトリクス（条件 → 推奨）</h2>
+        <span class="small muted">借り手の「怖さ」×「対象」で推奨プロダクトが決まる</span>
       </div>
-      <div class="card-body" style="padding: 0;">
-        <svg viewBox="0 0 1000 440" width="100%" style="display: block; background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);">
-          <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
-            </marker>
-            <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0d9488"/>
-            </marker>
-            <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
-            </filter>
-          </defs>
-
-          <!-- ===== STEP 1 ===== -->
-          <rect x="20" y="20" width="220" height="36" rx="6" fill="#0c1929"/>
-          <text x="32" y="44" font-size="12" font-weight="700" fill="#fff">STEP 1</text>
-          <text x="88" y="44" font-size="11" fill="rgba(255,255,255,.7)">借り手の「怖さ」を聞く</text>
-
-          <g transform="translate(20, 66)">
-            <rect width="220" height="44" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
-            <circle cx="20" cy="22" r="10" fill="#f1f5f9"/><text x="20" y="26" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">A</text>
-            <text x="40" y="20" font-size="11" font-weight="600" fill="#0c1929">早く入金がほしい</text>
-            <text x="40" y="34" font-size="9" fill="#64748b">資金ショート回避が最優先</text>
-          </g>
-          <g transform="translate(20, 116)">
-            <rect width="220" height="44" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
-            <circle cx="20" cy="22" r="10" fill="#f1f5f9"/><text x="20" y="26" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">B</text>
-            <text x="40" y="20" font-size="11" font-weight="600" fill="#0c1929">手続きが重いのは無理</text>
-            <text x="40" y="34" font-size="9" fill="#64748b">稟議・法務・書類で遅れる</text>
-          </g>
-          <g transform="translate(20, 166)">
-            <rect width="220" height="44" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
-            <circle cx="20" cy="22" r="10" fill="#f1f5f9"/><text x="20" y="26" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">C</text>
-            <text x="40" y="20" font-size="11" font-weight="600" fill="#0c1929">固定返済が怖い</text>
-            <text x="40" y="34" font-size="9" fill="#64748b">返済日が締切になると詰む</text>
-          </g>
-
-          <!-- 矢印 STEP1 → STEP2（1本にまとめる） -->
-          <path d="M 240 138 L 280 138" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
-
-          <!-- ===== STEP 2 ===== -->
-          <rect x="290" y="20" width="200" height="36" rx="6" fill="#0c1929"/>
-          <text x="302" y="44" font-size="12" font-weight="700" fill="#fff">STEP 2</text>
-          <text x="358" y="44" font-size="11" fill="rgba(255,255,255,.7)">対象を確認</text>
-
-          <g transform="translate(290, 66)">
-            <rect width="200" height="54" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" filter="url(#shadow)"/>
-            <text x="14" y="22" font-size="11" font-weight="600" fill="#1e40af">SaaS（B2B/B2C）</text>
-            <text x="14" y="38" font-size="9" fill="#3b82f6">契約期間の利用料が明確 → 将来債権</text>
-          </g>
-          <g transform="translate(290, 130)">
-            <rect width="200" height="54" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" filter="url(#shadow)"/>
-            <text x="14" y="22" font-size="11" font-weight="600" fill="#1e40af">スクール/ジム等</text>
-            <text x="14" y="38" font-size="9" fill="#3b82f6">月謝・会費 → 請求・回収オペ重要</text>
-          </g>
-
-          <!-- 矢印 STEP2 → OUTPUT（1本にまとめる） -->
-          <path d="M 490 130 L 530 130" stroke="#0d9488" stroke-width="2" fill="none" marker-end="url(#arrow-teal)"/>
-
-          <!-- ===== OUTPUT ===== -->
-          <rect x="540" y="20" width="440" height="36" rx="6" fill="#0d9488"/>
-          <text x="552" y="44" font-size="12" font-weight="700" fill="#fff">OUTPUT</text>
-          <text x="620" y="44" font-size="11" fill="rgba(255,255,255,.8)">候補を絞り込む（借金感の低い順）</text>
-
-          <!-- 候補カード 2x2 -->
-          <g transform="translate(540, 66)">
-            <rect width="210" height="64" rx="8" fill="#fff" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
-            <rect width="4" height="64" rx="2" fill="#10b981"/>
-            <text x="16" y="24" font-size="11" font-weight="700" fill="#0c1929">① 早期払い（決済）</text>
-            <text x="16" y="40" font-size="9" fill="#64748b">借金感：低 / 手続き：軽 / 体感：早い</text>
-            <rect x="16" y="48" width="60" height="12" rx="6" fill="#ecfdf5"/>
-            <text x="22" y="57" font-size="8" font-weight="600" fill="#047857">収益：中</text>
-          </g>
-          <g transform="translate(760, 66)">
-            <rect width="210" height="64" rx="8" fill="#fff" stroke="#f97316" stroke-width="2" filter="url(#shadow)"/>
-            <rect width="4" height="64" rx="2" fill="#f97316"/>
-            <text x="16" y="24" font-size="11" font-weight="700" fill="#0c1929">② ファクタリングロボ</text>
-            <text x="16" y="40" font-size="9" fill="#64748b">借金感：中 / 一括で入る強み</text>
-            <rect x="16" y="48" width="70" height="12" rx="6" fill="#fff7ed"/>
-            <text x="22" y="57" font-size="8" font-weight="600" fill="#c2410c">収益：条件次第</text>
-          </g>
-          <g transform="translate(540, 140)">
-            <rect width="210" height="64" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
-            <rect width="4" height="64" rx="2" fill="#3b82f6"/>
-            <text x="16" y="24" font-size="11" font-weight="700" fill="#0c1929">③ RBF</text>
-            <text x="16" y="40" font-size="9" fill="#64748b">借金感：中 / 柔軟性が高い（説明次第）</text>
-            <rect x="16" y="48" width="60" height="12" rx="6" fill="#eff6ff"/>
-            <text x="22" y="57" font-size="8" font-weight="600" fill="#1d4ed8">収益：中〜高</text>
-          </g>
-          <g transform="translate(760, 140)">
-            <rect width="210" height="64" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" filter="url(#shadow)"/>
-            <rect width="4" height="64" rx="2" fill="#ef4444"/>
-            <text x="16" y="24" font-size="11" font-weight="700" fill="#0c1929">④ 前借り君（将来）</text>
-            <text x="16" y="40" font-size="9" fill="#64748b">借金感：高 / 体制整備が前提</text>
-            <text x="16" y="56" font-size="8" font-weight="700" fill="#b91c1c">※現時点で提供不可</text>
-          </g>
-
-          <!-- ===== STEP 3 ===== -->
-          <rect x="20" y="240" width="220" height="36" rx="6" fill="#0c1929"/>
-          <text x="32" y="264" font-size="12" font-weight="700" fill="#fff">STEP 3</text>
-          <text x="88" y="264" font-size="11" fill="rgba(255,255,255,.7)">提案順を決める</text>
-
-          <g transform="translate(20, 286)">
-            <rect width="470" height="70" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
-            <text x="16" y="22" font-size="11" font-weight="600" fill="#0c1929">1. 借り手の怖さが一番下がるもの</text>
-            <text x="240" y="22" font-size="9" fill="#64748b">（離脱防止）</text>
-            <text x="16" y="40" font-size="11" font-weight="600" fill="#0c1929">2. 対象・運用に合うもの</text>
-            <text x="190" y="40" font-size="9" fill="#64748b">（提供可否の確度）</text>
-            <text x="16" y="58" font-size="11" font-weight="600" fill="#0c1929">3. その中で貸主収益が高い順</text>
-            <text x="230" y="58" font-size="9" fill="#64748b">（収益は条件で変動）</text>
-          </g>
-
-          <!-- 矢印 OUTPUT → STEP3 -->
-          <path d="M 540 172 L 510 172 L 510 320 L 490 320" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
-
-          <!-- 注釈 -->
-          <g transform="translate(540, 240)">
-            <rect width="430" height="58" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
-            <text x="16" y="22" font-size="10" font-weight="700" fill="#92400e">ポイント</text>
-            <text x="16" y="38" font-size="9" fill="#78350f">• 「返済」「貸付」の言葉を避けると借金感が下がる</text>
-            <text x="16" y="52" font-size="9" fill="#78350f">• 前借り君は将来オプション（貸金業登録等が前提）</text>
-          </g>
-
-          <!-- フローの大きな矢印ライン（背景に薄く） -->
-          <path d="M 130 220 L 130 235 Q 130 240 135 240 L 280 240 Q 290 240 290 230 L 290 195" stroke="#e2e8f0" stroke-width="3" fill="none" stroke-dasharray="6,4"/>
-          <path d="M 390 195 L 390 240 Q 390 250 400 250 L 525 250 Q 540 250 540 235 L 540 210" stroke="#e2e8f0" stroke-width="3" fill="none" stroke-dasharray="6,4"/>
-        </svg>
+      <div style="overflow-x: auto;">
+        <table class="data-table" style="min-width: 900px;">
+          <thead>
+            <tr>
+              <th style="width: 200px; background: #0c1929; color: #fff;">借り手の「怖さ」</th>
+              <th style="width: 350px; background: #eff6ff;">SaaS（B2B/B2C）<br><span class="sub" style="color: #3b82f6;">契約期間の利用料が明確</span></th>
+              <th style="width: 350px; background: #eff6ff;">スクール/ジム等<br><span class="sub" style="color: #3b82f6;">月謝・会費の反復請求</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="background: #f8fafc;">
+                <strong>A. 早く入金がほしい</strong><br>
+                <span class="small muted">資金ショート回避が最優先</span>
+              </td>
+              <td>
+                <span class="pill pill-green" style="margin-right: 4px;">1st</span> <strong>早期払い</strong><br>
+                <span class="pill pill-orange" style="margin-right: 4px; margin-top: 6px; display: inline-block;">2nd</span> <strong>ファクタリングロボ</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 一括で大きく入る</span>
+              </td>
+              <td>
+                <span class="pill pill-green" style="margin-right: 4px;">1st</span> <strong>早期払い</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 毎月の入金が早くなる</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="background: #f8fafc;">
+                <strong>B. 手続きが重いのは無理</strong><br>
+                <span class="small muted">稟議・法務・書類で遅れる</span>
+              </td>
+              <td>
+                <span class="pill pill-green" style="margin-right: 4px;">1st</span> <strong>早期払い</strong><br>
+                <span class="pill pill-blue" style="margin-right: 4px; margin-top: 6px; display: inline-block;">2nd</span> <strong>RBF</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 最短1営業日で審査完了</span>
+              </td>
+              <td>
+                <span class="pill pill-green" style="margin-right: 4px;">1st</span> <strong>早期払い</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 手続きが最も軽い</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="background: #f8fafc;">
+                <strong>C. 固定返済が怖い</strong><br>
+                <span class="small muted">返済日が締切になると詰む</span>
+              </td>
+              <td>
+                <span class="pill pill-blue" style="margin-right: 4px;">1st</span> <strong>RBF</strong><br>
+                <span class="pill pill-green" style="margin-right: 4px; margin-top: 6px; display: inline-block;">2nd</span> <strong>早期払い</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 売上連動で柔軟 / 返済なし</span>
+              </td>
+              <td>
+                <span class="pill pill-green" style="margin-right: 4px;">1st</span> <strong>早期払い</strong><br>
+                <span class="pill pill-blue" style="margin-right: 4px; margin-top: 6px; display: inline-block;">2nd</span> <strong>RBF</strong><br>
+                <span class="small muted" style="margin-top: 4px; display: block;">→ 返済なし / 売上連動</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="summary-row">
-        <div class="summary-item">
-          <div class="label">借金感を下げるポイント</div>
-          <div class="value">「返済」「貸付」の言葉を避ける</div>
-        </div>
-        <div class="summary-item">
-          <div class="label">前借り君の扱い</div>
-          <div class="value">将来オプション（貸金業登録等が前提）</div>
-        </div>
-        <div class="summary-item">
-          <div class="label">参考</div>
-          <div class="value"><a href="https://www.robotpayment.co.jp/lan/factoring_robo/saas/" target="_blank" style="color: var(--teal); text-decoration: underline;">ファクタリングロボ for SaaS 公式</a></div>
+      <div style="padding: 20px 24px; background: #f8fafc; border-top: 1px solid rgba(12,25,41,.06);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div style="background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid rgba(12,25,41,.06);">
+            <div style="font-size: 11px; color: var(--slate); font-weight: 600;">提案順の決め方</div>
+            <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">1. 怖さが下がる → 2. 対象に合う → 3. 貸主収益が高い</div>
+          </div>
+          <div style="background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid rgba(12,25,41,.06);">
+            <div style="font-size: 11px; color: var(--slate); font-weight: 600;">借金感を下げるポイント</div>
+            <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">「返済」「貸付」の言葉を避ける</div>
+          </div>
+          <div style="background: #fffbeb; border-radius: 10px; padding: 14px 16px; border: 1px solid #fcd34d;">
+            <div style="font-size: 11px; color: #92400e; font-weight: 600;">前借り君について</div>
+            <div style="font-size: 13px; font-weight: 700; color: #92400e; margin-top: 6px;">将来オプション（貸金業登録等が前提）— 現時点で提供不可</div>
+          </div>
         </div>
       </div>
     </section>
