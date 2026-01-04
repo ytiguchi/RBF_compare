@@ -183,21 +183,25 @@
             </div>
         </section>
 
-        <!-- 3. Factoring -->
+        <!-- 3. Factoring Robo for SaaS -->
         <section id="factoring" class="section-card">
             <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-6">
                 <div class="flex items-center gap-3">
                     <span class="bg-amber-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">03</span>
-                    <h2 class="text-xl font-black tracking-tight text-slate-900">ファクタリング</h2>
+                    <h2 class="text-xl font-black tracking-tight text-slate-900">ファクタリングロボ for SaaS</h2>
                 </div>
                 <div class="flex gap-8 items-center flex-1 max-w-3xl px-6">
                     <div class="flex-1">
-                        <span class="param-hero-label">割引率: <span id="factoringRateLabel" class="text-amber-600 font-black">20.0</span>%</span>
-                        <input type="range" id="factoringRateSlider" min="1" max="40" step="1" value="20">
+                        <span class="param-hero-label">手数料率（年契約総額に対して）: <span id="factoringFeeRateLabel" class="text-amber-600 font-black">2.0</span>%</span>
+                        <input type="range" id="factoringFeeRateSlider" min="0.5" max="10" step="0.1" value="2.0">
                     </div>
                     <div class="flex-1">
-                        <span class="param-hero-label">年回転数: <span id="factoringFreqLabel" class="text-amber-600 font-black">2</span>回</span>
-                        <input type="range" id="factoringFreqSlider" min="1" max="6" step="1" value="2">
+                        <span class="param-hero-label">契約期間（将来債権の対象）: <span id="factoringTermLabel" class="text-amber-600 font-black">12</span>ヶ月</span>
+                        <input type="range" id="factoringTermSlider" min="3" max="12" step="1" value="12">
+                    </div>
+                    <div class="flex-1">
+                        <span class="param-hero-label">月額費用（請求代行等）: <span id="factoringMonthlyFeeLabel" class="text-amber-600 font-black">2.88</span>万</span>
+                        <input type="range" id="factoringMonthlyFeeSlider" min="0" max="10" step="0.1" value="2.88">
                     </div>
                     <div class="min-w-[100px]">
                         <span class="param-hero-label">利息回収合計</span>
@@ -205,7 +209,7 @@
                     </div>
                 </div>
                 <div class="flex gap-6 border-l border-slate-200 pl-6 text-right">
-                    <div><span class="param-hero-label">債権額</span><span class="param-hero">1,000万</span></div>
+                    <div><span class="param-hero-label">初期支払（固定）</span><span class="param-hero">1,000万</span></div>
                 </div>
             </div>
             <div class="p-6 grid lg:grid-cols-12 gap-6 items-start">
@@ -300,15 +304,17 @@
             const rbfRate = parseFloat(document.getElementById('rbfRateSlider').value);
             const rbfTerm = parseInt(document.getElementById('rbfTermSlider').value);
             const maegariRate = parseFloat(document.getElementById('maegariRateSlider').value);
-            const factoringRate = parseFloat(document.getElementById('factoringRateSlider').value);
-            const factoringFreq = parseInt(document.getElementById('factoringFreqSlider').value);
+            const factoringFeeRate = parseFloat(document.getElementById('factoringFeeRateSlider').value);
+            const factoringTerm = parseInt(document.getElementById('factoringTermSlider').value);
+            const factoringMonthlyFee = parseFloat(document.getElementById('factoringMonthlyFeeSlider').value);
             const earlyRate = parseFloat(document.getElementById('earlyRateSlider').value);
 
             document.getElementById('rbfRateLabel').innerText = rbfRate.toFixed(1);
             document.getElementById('rbfTermLabel').innerText = rbfTerm;
             document.getElementById('maegariRateLabel').innerText = maegariRate.toFixed(1);
-            document.getElementById('factoringRateLabel').innerText = factoringRate.toFixed(1);
-            document.getElementById('factoringFreqLabel').innerText = factoringFreq;
+            document.getElementById('factoringFeeRateLabel').innerText = factoringFeeRate.toFixed(1);
+            document.getElementById('factoringTermLabel').innerText = factoringTerm;
+            document.getElementById('factoringMonthlyFeeLabel').innerText = factoringMonthlyFee.toFixed(2);
             document.getElementById('earlyRateLabel').innerText = earlyRate.toFixed(1);
 
             // --- RBF Data ---
@@ -370,47 +376,40 @@
             // --- Factoring Data ---
             const factoringData = [];
             let factoringCumInterest = 0;
-            const discountAmount = provision * (factoringRate / 100);
-            const investmentPerCycle = provision - discountAmount;
             const factoringTableBody = document.getElementById('factoringTableBody');
             factoringTableBody.innerHTML = '';
-            
-            // Freq based timing
-            const cycles = [];
-            if (factoringFreq >= 1) cycles.push(0);
-            if (factoringFreq >= 2) cycles.push(6);
-            if (factoringFreq >= 3) cycles.push(3);
-            if (factoringFreq >= 4) cycles.push(9);
-            if (factoringFreq >= 5) cycles.push(1);
-            if (factoringFreq >= 6) cycles.push(10);
-            cycles.sort((a,b) => a-b);
+
+            // ファクタリングロボ for SaaS（将来債権を初月一括資金化＋請求代行）
+            // 前提: 月0に1,000万円を支払（固定）、月1〜契約期間で毎月回収。
+            // 手数料率は「契約期間総額（将来債権）」に対して。月額費用は別建て収益として月次で加算。
+            const feeRate = factoringFeeRate / 100;
+            const totalReceivable = provision / (1 - feeRate); // 回収総額（将来債権総額）
+            const totalFeeProfit = totalReceivable - provision; // 手数料収益（万）
+            const monthlyPrincipal = provision / factoringTerm;
+            const monthlyFeeProfit = totalFeeProfit / factoringTerm;
+            const monthlyServiceProfit = factoringMonthlyFee; // 万/月
 
             for (let i = 0; i <= 12; i++) {
                 let move = 0, principal = 0, interest = 0, balance = 0;
-                
-                // Simple logic for 1-6 times
-                const interval = Math.floor(12 / factoringFreq);
-                const isActionMonth = (i % interval === 0) && (i < 12);
-                const isRecoveryMonth = (i > 0 && (i - 2) % interval === 0) || (i === (12/factoringFreq)*factoringFreq && i > 0);
-                
-                // Redo simplified for clearer 2rd param request
-                let currentBalance = 0;
-                for(let c=0; c<factoringFreq; c++) {
-                    let start = c * Math.max(2, Math.floor(12/factoringFreq));
-                    let end = start + 2;
-                    if (i >= start && i < end) currentBalance = provision;
-                    if (i === start) move -= investmentPerCycle;
-                    if (i === end && i <= 12) { move += provision; principal = investmentPerCycle; interest = discountAmount; factoringCumInterest += interest; currentBalance = 0;}
+                if (i === 0) {
+                    move = -provision;
+                    balance = provision;
+                } else if (i <= factoringTerm) {
+                    principal = monthlyPrincipal;
+                    interest = monthlyFeeProfit + monthlyServiceProfit;
+                    factoringCumInterest += interest;
+                    move = principal + interest;
+                    balance = provision - (monthlyPrincipal * i);
+                    if (i === factoringTerm) balance = 0;
                 }
-                balance = currentBalance;
 
                 factoringData.push({ month: i, move, principal, interest, balance, cumInterest: factoringCumInterest });
-                factoringTableBody.innerHTML += `<tr class="${(principal > 0) ? 'highlight-row font-bold' : ''}">
+                factoringTableBody.innerHTML += `<tr class="${(i === factoringTerm) ? 'highlight-row font-bold' : ''}">
                     <td class="font-bold">月${i}</td>
                     <td class="${move < 0 ? 'text-red-500' : 'text-emerald-600'} font-bold">${move !== 0 ? (move > 0 ? '+' : '') + formatNum(move) : '0'}</td>
                     <td>${principal !== 0 ? formatNum(principal) : '0'}</td>
                     <td class="text-amber-600 font-bold">${interest !== 0 ? formatNum(interest) : '0'}</td>
-                    <td>${formatNum(balance)}</td>
+                    <td>${formatNum(Math.max(0, balance))}</td>
                 </tr>`;
             }
             document.getElementById('factoringTotalProfit').innerText = formatNum(factoringCumInterest) + '万';
@@ -497,7 +496,7 @@
                 datasets: [
                     { label: 'RBF', data: [], borderColor: '#3b82f6', borderWidth: 4, tension: 0.1 },
                     { label: '前借り君', data: [], borderColor: '#14b8a6', borderWidth: 4, tension: 0.1 },
-                    { label: 'ファクタリング', data: [], borderColor: '#f59e0b', borderWidth: 4, stepped: true },
+                    { label: 'ファクタリングロボ for SaaS', data: [], borderColor: '#f59e0b', borderWidth: 4, tension: 0.1 },
                     { label: '早期払い', data: [], borderColor: '#10b981', borderWidth: 4, tension: 0.1 }
                 ]
             },
@@ -511,7 +510,7 @@
             }
         });
 
-        ['rbfRateSlider', 'rbfTermSlider', 'maegariRateSlider', 'factoringRateSlider', 'factoringFreqSlider', 'earlyRateSlider'].forEach(id => {
+        ['rbfRateSlider', 'rbfTermSlider', 'maegariRateSlider', 'factoringFeeRateSlider', 'factoringTermSlider', 'factoringMonthlyFeeSlider', 'earlyRateSlider'].forEach(id => {
             document.getElementById(id).addEventListener('input', updateAll);
         });
 
