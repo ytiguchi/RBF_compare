@@ -84,12 +84,12 @@
             <p class="header-sub">詳細タイムチャート：1,000万円貸付時のキャッシュフロー詳細シミュレーション</p>
         </div>
 
-        <div class="tab-nav">
-            <a href="#rbf" class="tab-btn">01 RBF</a>
-            <a href="#maegari" class="tab-btn">02 前借り君</a>
-            <a href="#factoring" class="tab-btn">03 ファクタリング</a>
-            <a href="#early-settlement" class="tab-btn">04 早期払い</a>
-            <a href="#summary" class="tab-btn active">📊 サマリー</a>
+        <div class="tab-nav" id="tabNav">
+            <a href="#rbf" class="tab-btn" data-section="rbf">01 RBF</a>
+            <a href="#maegari" class="tab-btn" data-section="maegari">02 前借り君</a>
+            <a href="#factoring" class="tab-btn" data-section="factoring">03 ファクタリング</a>
+            <a href="#early-settlement" class="tab-btn" data-section="early-settlement">04 早期払い</a>
+            <a href="#summary" class="tab-btn" data-section="summary">📊 サマリー</a>
         </div>
 
         <main class="mt-4 space-y-8">
@@ -610,6 +610,58 @@
         });
 
         updateAll();
+
+        // --- Tab Navigation Active State ---
+        const sections = ['rbf', 'maegari', 'factoring', 'early-settlement', 'summary'];
+        const tabBtns = document.querySelectorAll('#tabNav .tab-btn');
+
+        const updateActiveTab = () => {
+            const scrollPos = window.scrollY + 150;
+            let currentSection = sections[0];
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section && section.offsetTop <= scrollPos) {
+                    currentSection = id;
+                }
+            });
+
+            tabBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === currentSection) {
+                    btn.classList.add('active');
+                }
+            });
+        };
+
+        // Update on scroll
+        window.addEventListener('scroll', updateActiveTab);
+
+        // Update on hash change
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.slice(1);
+            if (hash && sections.includes(hash)) {
+                tabBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.section === hash) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
+
+        // Initial state based on hash or default to first section
+        const initHash = window.location.hash.slice(1);
+        if (initHash && sections.includes(initHash)) {
+            tabBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === initHash) {
+                    btn.classList.add('active');
+                }
+            });
+        } else {
+            updateActiveTab();
+        }
     </script>
 </body>
 </html>
