@@ -3,427 +3,375 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>借り手の感情比較（別章） | 株式会社ロボットペイメント</title>
+  <title>借り手の感情比較 | 株式会社ロボットペイメント</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; line-height: 1.7; letter-spacing: 0.01em; }
-    .container { max-width: 1320px; margin: 0 auto; padding: 26px 16px 72px; }
-    .badge { display:inline-flex; align-items:center; padding: 2px 10px; border-radius: 9999px; font-weight: 900; font-size: 12px; border: 1px solid rgba(15,23,42,.15); }
-    .card { background:#fff; border:1px solid rgba(15,23,42,.12); border-radius: 18px; box-shadow: 0 10px 28px rgba(15,23,42,.06); }
-    .kpi { font-weight: 900; letter-spacing: -0.02em; }
-    .grid-table { width:100%; border-collapse: separate; border-spacing:0; font-size: 13px; }
-    .grid-table th { position: sticky; top: 0; background: #f8fafc; z-index: 2; text-align:left; padding: 10px 10px; border-bottom: 2px solid rgba(15,23,42,.10); }
-    .grid-table td { padding: 10px 10px; border-bottom: 1px solid rgba(15,23,42,.08); vertical-align: top; }
-    .score { font-weight: 900; }
-    .score.pill { padding: 2px 10px; border-radius: 9999px; display:inline-block; }
-    .s-gg { background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; }
-    .s-g  { background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; }
-    .s-n  { background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; }
-    .s-b  { background:#fef2f2; border:1px solid #fecaca; color:#7f1d1d; }
-    .muted { color: rgba(15,23,42,.62); }
-    .callout { border-left: 4px solid #0f172a; background: #f8fafc; }
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&display=swap');
+    :root {
+      --navy: #0c1929;
+      --navy-light: #1a2d45;
+      --teal: #0d9488;
+      --teal-light: #14b8a6;
+      --coral: #f97316;
+      --slate: #64748b;
+    }
+    body { 
+      font-family: 'IBM Plex Sans JP', ui-sans-serif, system-ui, sans-serif; 
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--navy);
+      line-height: 1.6;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
+    
+    /* Header */
+    .header-bar { 
+      background: var(--navy); 
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-bar .inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; }
+    .header-nav { display: flex; gap: 6px; }
+    .header-nav a { 
+      color: rgba(255,255,255,.7); 
+      font-size: 12px; 
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all .15s;
+    }
+    .header-nav a:hover { color: #fff; background: rgba(255,255,255,.1); }
+    .header-nav a.active { color: #fff; background: var(--teal); }
+
+    /* Cards */
+    .card { 
+      background: #fff; 
+      border-radius: 16px; 
+      box-shadow: 0 1px 3px rgba(12,25,41,.06), 0 8px 24px rgba(12,25,41,.04);
+      overflow: hidden;
+    }
+    .card-header { 
+      padding: 20px 24px; 
+      border-bottom: 1px solid rgba(12,25,41,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .card-header h2 { font-size: 15px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+    .card-header h2 .num { 
+      background: var(--navy); 
+      color: #fff; 
+      width: 24px; height: 24px; 
+      border-radius: 6px; 
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .card-body { padding: 24px; }
+
+    /* Table */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { 
+      text-align: left; 
+      padding: 12px 14px; 
+      background: #f8fafc; 
+      font-weight: 600; 
+      color: var(--slate);
+      border-bottom: 2px solid rgba(12,25,41,.08);
+      white-space: nowrap;
+    }
+    .data-table th .sub { font-weight: 400; font-size: 11px; color: #94a3b8; display: block; margin-top: 2px; }
+    .data-table td { padding: 14px 14px; border-bottom: 1px solid rgba(12,25,41,.05); vertical-align: top; }
+    .data-table tbody tr:hover { background: #fafbfc; }
+    .data-table .name { font-weight: 700; color: var(--navy); }
+    .data-table .highlight { background: #fffbeb; }
+
+    /* Pills */
+    .pill { 
+      display: inline-flex; 
+      align-items: center; 
+      padding: 3px 10px; 
+      border-radius: 20px; 
+      font-size: 11px; 
+      font-weight: 600;
+    }
+    .pill-green { background: #ecfdf5; color: #047857; }
+    .pill-blue { background: #eff6ff; color: #1d4ed8; }
+    .pill-orange { background: #fff7ed; color: #c2410c; }
+    .pill-red { background: #fef2f2; color: #b91c1c; }
+
+    /* Diagram */
+    .diagram-wrap { 
+      background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(12,25,41,.06);
+    }
+
+    /* Flow Grid (CSS Grid ベースのフロー) */
+    .flow-grid { display: grid; grid-template-columns: 280px 1fr 1fr; gap: 16px; }
+    .flow-col { display: flex; flex-direction: column; gap: 12px; }
+    .flow-box {
+      background: #fff;
+      border: 1px solid rgba(12,25,41,.10);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+    }
+    .flow-box.step { background: var(--navy); color: #fff; border: none; }
+    .flow-box.step .label { font-size: 11px; opacity: .7; margin-bottom: 4px; }
+    .flow-box.step .title { font-size: 14px; font-weight: 700; }
+    .flow-box .tag { font-size: 11px; font-weight: 600; color: var(--slate); margin-bottom: 6px; }
+    .flow-box .title { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .flow-box .desc { font-size: 11px; color: var(--slate); margin-top: 6px; }
+    .flow-box.good { border-left: 4px solid var(--teal); }
+    .flow-box.warn { border-left: 4px solid var(--coral); }
+    .flow-box.info { border-left: 4px solid #3b82f6; }
+    .flow-box.stop { border-left: 4px solid #ef4444; background: #fef2f2; }
+    .flow-box .profit { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 4px;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(12,25,41,.04);
+      color: var(--navy);
+    }
+
+    /* Arrow indicators */
+    .arrow-down { 
+      width: 24px; height: 24px; 
+      margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--slate);
+    }
+    .arrow-right {
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate);
+      font-size: 18px;
+    }
+
+    /* Summary */
+    .summary-row { 
+      display: flex; 
+      gap: 12px; 
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid rgba(12,25,41,.06);
+    }
+    .summary-item { 
+      flex: 1; 
+      min-width: 180px;
+      padding: 12px 16px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(12,25,41,.06);
+    }
+    .summary-item .label { font-size: 11px; color: var(--slate); font-weight: 600; }
+    .summary-item .value { font-size: 14px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+
+    .muted { color: var(--slate); }
     .small { font-size: 12px; }
-    .toc a { color: rgba(15,23,42,.78); text-decoration: none; }
-    .toc a:hover { color: rgba(15,23,42,1); text-decoration: underline; text-underline-offset: 3px; }
-    .section-title { font-size: 14px; font-weight: 900; color: rgba(15,23,42,.82); }
-    .subtle { background: linear-gradient(180deg, rgba(248,250,252,1), rgba(248,250,252,0)); }
-    .focus-col { background: #fff7ed; }
-    .diagram { border:1px solid rgba(15,23,42,.10); background:#fff; border-radius: 16px; overflow:hidden; }
-    .diagram-h { background:#0f172a; color:#fff; padding: 10px 14px; font-weight: 900; font-size: 13px; }
-    .diagram-b { padding: 14px; }
-    details > summary { cursor: pointer; list-style: none; }
-    details > summary::-webkit-details-marker { display:none; }
-    .summary-chip { display:inline-flex; align-items:center; gap:8px; padding: 10px 12px; border-radius: 14px; border:1px solid rgba(15,23,42,.14); background:#fff; font-weight: 900; }
-    .hr { height:1px; background: rgba(15,23,42,.10); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .flow-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body>
+  <div class="header-bar">
+    <div class="inner">
+      <div class="logo">株式会社ロボットペイメント</div>
+      <nav class="header-nav">
+        <a href="../index.html">シミュレーション</a>
+        <a href="borrower_emotion.html" class="active">感情比較</a>
+      </nav>
+    </div>
+  </div>
+
   <div class="container">
-    <header class="mb-6">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div class="text-slate-700 font-black tracking-tight">株式会社ロボットペイメント</div>
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight mt-1">借り手の「感情」で比較（別章）</h1>
-          <div class="muted mt-2 small">定量（キャッシュフロー）とは別に、借り手が“導入を決める時の心理”で比較する。</div>
-        </div>
-        <div class="flex gap-2 flex-wrap">
-          <span class="badge bg-white">軸: 借金感の少なさ（最重要）</span>
-          <span class="badge bg-white">ペルソナ: A 資金繰り / B 成長投資</span>
-        </div>
-      </div>
+    <!-- Page Header -->
+    <header style="margin-bottom: 32px;">
+      <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">借り手の「感情」で比較</h1>
+      <p class="muted small" style="margin-top: 8px;">キャッシュフローとは別に、借り手が"導入を決める心理"で比較。<strong>借金感の少なさ</strong>を最重要軸に。</p>
     </header>
 
-    <section class="card p-5 mb-6 subtle">
-      <div class="grid lg:grid-cols-12 gap-4 items-start">
-        <div class="lg:col-span-5">
-          <div class="section-title">このページの使い方</div>
-          <div class="small muted mt-1">
-            まずは「感情マトリクス」で全体像を掴み、必要なところだけ図解を開いて確認してください。<br/>
-            ※評価は“借り手の体感”の仮置きです。商談の言い方・運用設計で簡単に変わります。
-          </div>
-        </div>
-        <div class="lg:col-span-4">
-          <div class="section-title">目次</div>
-          <div class="toc small mt-2 grid grid-cols-2 gap-x-3 gap-y-1">
-            <a href="#matrix">1. 感情マトリクス</a>
-            <a href="#story">2. ペルソナ別ストーリー</a>
-            <a href="#diagrams">3. 追加図解（折りたたみ）</a>
-            <a href="#diagrams">4. 提案フロー（統合版）</a>
-          </div>
-        </div>
-        <div class="lg:col-span-3">
-          <div class="section-title">表示</div>
-          <div class="flex gap-2 mt-2">
-            <button id="modeMatrix" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-slate-900 text-white">マトリクス</button>
-            <button id="modeStory" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-white text-slate-900">ストーリー</button>
-          </div>
-          <div class="small muted mt-2">図解は “追加図解” にまとめています。</div>
-        </div>
+    <!-- 図表① 比較マトリクス -->
+    <section class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <h2><span class="num">1</span>比較マトリクス（定量ベース）</h2>
+        <span class="small muted">数値は目安。契約・運用条件で変動。</span>
       </div>
-    </section>
-
-    <!-- Matrix -->
-    <section id="matrix" class="mb-3"></section>
-    <section id="matrixSection" class="card overflow-hidden mb-6">
-      <div class="p-5 border-b border-slate-200">
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div class="text-sm font-black text-slate-700">図表① 比較マトリクス（定量ベース）</div>
-            <div class="muted small mt-1">可能な限り定量的な指標で比較。「借金感」列は法的区分+BS計上で判断。</div>
-          </div>
-          <div class="text-right">
-            <div class="text-sm font-black text-slate-700">凡例</div>
-            <div class="small muted mt-1">数値は目安。実際は契約・運用条件で変動。</div>
-          </div>
-        </div>
-      </div>
-      <div class="p-0 overflow-auto">
-        <table class="grid-table min-w-[1180px]">
+      <div style="overflow-x: auto;">
+        <table class="data-table" style="min-width: 1100px;">
           <thead>
             <tr>
-              <th class="w-[180px]">手段</th>
-              <th class="w-[140px]">手続き<br/><span class="font-normal text-xs text-slate-500">書類数 / 審査日数</span></th>
-              <th class="w-[130px]">入金スピード<br/><span class="font-normal text-xs text-slate-500">申込→着金</span></th>
-              <th class="w-[130px]">返済タイプ</th>
-              <th class="w-[160px]">借りれる額<br/><span class="font-normal text-xs text-slate-500">目安</span></th>
-              <th class="w-[200px]" style="background:#fff7ed;">借金感<br/><span class="font-normal text-xs text-slate-500">法的区分 / BS計上</span></th>
+              <th style="width:160px;">手段</th>
+              <th style="width:120px;">手続き<span class="sub">書類数 / 審査</span></th>
+              <th style="width:130px;">入金スピード<span class="sub">申込→着金</span></th>
+              <th style="width:100px;">返済タイプ</th>
+              <th style="width:140px;">借りれる額<span class="sub">目安</span></th>
+              <th style="width:180px;" class="highlight">借金感<span class="sub">法的区分 / BS計上</span></th>
               <th>備考</th>
             </tr>
           </thead>
-          <tbody id="matrixBody"></tbody>
+          <tbody>
+            <tr>
+              <td class="name">早期払い</td>
+              <td><strong>1〜2点</strong><br><span class="small muted">即日〜1営業日</span></td>
+              <td><strong>翌1日払い</strong><br><span class="small muted">実質0サイト</span></td>
+              <td><span class="pill pill-green">返済なし</span></td>
+              <td><strong>月売上相当</strong><br><span class="small muted">毎月の確定売上</span></td>
+              <td class="highlight"><strong>借入ではない</strong><br><span class="pill pill-green">売掛金消滅</span></td>
+              <td class="small muted">「入金が早いだけ」で説明しやすい</td>
+            </tr>
+            <tr>
+              <td class="name">ファクタリングロボ<br>for SaaS</td>
+              <td><strong>3〜5点</strong><br><span class="small muted">2〜5営業日</span></td>
+              <td><strong>最短5営業日</strong></td>
+              <td><span class="pill pill-green">返済なし</span></td>
+              <td><strong>年契約総額</strong><br><span class="small muted">将来債権1年分等</span></td>
+              <td class="highlight"><strong>借入ではない</strong><br><span class="pill pill-blue">前受金計上</span></td>
+              <td class="small muted">一括で入る。契約期間で規模が決まる</td>
+            </tr>
+            <tr>
+              <td class="name">RBF</td>
+              <td><strong>5〜10点</strong><br><span class="small muted">3〜10営業日</span></td>
+              <td><strong>5〜10営業日</strong></td>
+              <td><span class="pill pill-blue">売上連動</span></td>
+              <td><strong>月売上×3〜6ヶ月</strong><br><span class="small muted">審査による</span></td>
+              <td class="highlight"><strong>事実上の借入</strong><br><span class="pill pill-orange">負債計上</span></td>
+              <td class="small muted">「売上連動」の説明が通れば柔軟性訴求可</td>
+            </tr>
+            <tr>
+              <td class="name">前借り君（将来）</td>
+              <td><strong>10点以上</strong><br><span class="small muted">7〜14営業日</span></td>
+              <td><strong>7〜14営業日</strong></td>
+              <td><span class="pill pill-red">固定返済</span></td>
+              <td><strong>審査次第</strong><br><span class="small muted">数百万〜</span></td>
+              <td class="highlight"><strong>貸付（金銭消費貸借）</strong><br><span class="pill pill-red">負債計上</span></td>
+              <td class="small muted">貸付の文脈で借金感↑。体制整備が前提</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </section>
 
-    <!-- Story -->
-    <section id="story" class="mb-3"></section>
-    <section id="storySection" class="hidden space-y-6">
-      <div class="card p-5">
-        <div class="text-sm font-black text-slate-700">図表② ペルソナA（資金繰りが苦しい）—導入前→導入後</div>
-        <div class="grid md:grid-cols-12 gap-4 mt-4">
-          <div class="md:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="font-black">導入前（不安）</div>
-            <ul class="mt-2 small muted space-y-1">
-              <li>- 月末が来るたびに資金が薄い</li>
-              <li>- 固定返済があると「返済日が怖い」</li>
-              <li>- 手続きが重いと間に合わない</li>
-            </ul>
+    <!-- 図表② 提案フロー -->
+    <section class="card">
+      <div class="card-header">
+        <h2><span class="num">2</span>提案フロー（意思決定の流れ）</h2>
+        <span class="small muted">借り手の「怖さ」→「対象」→「候補」の順で判断</span>
+      </div>
+      <div class="card-body">
+        <div class="diagram-wrap">
+          <div class="flow-grid">
+            <!-- Column 1: ヒアリング -->
+            <div class="flow-col">
+              <div class="flow-box step">
+                <div class="label">STEP 1</div>
+                <div class="title">借り手の「怖さ」を聞く</div>
+              </div>
+              <div class="flow-box">
+                <div class="tag">A</div>
+                <div class="title">とにかく早く入金がほしい</div>
+                <div class="desc">資金ショート回避が最優先</div>
+              </div>
+              <div class="flow-box">
+                <div class="tag">B</div>
+                <div class="title">手続きが重いのは無理</div>
+                <div class="desc">稟議・法務・書類で遅れるのが怖い</div>
+              </div>
+              <div class="flow-box">
+                <div class="tag">C</div>
+                <div class="title">固定返済が怖い</div>
+                <div class="desc">返済日が締切になると詰む</div>
+              </div>
+              <div class="flow-box step" style="margin-top: auto;">
+                <div class="label">STEP 3</div>
+                <div class="title">提案順を決める</div>
+                <div class="desc" style="color: rgba(255,255,255,.7); margin-top: 8px;">
+                  1. 怖さが下がる順<br>
+                  2. 対象に合う順<br>
+                  3. 貸主収益が高い順
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 2: 対象確認 -->
+            <div class="flow-col">
+              <div class="flow-box step">
+                <div class="label">STEP 2</div>
+                <div class="title">対象を確認</div>
+              </div>
+              <div class="flow-box info">
+                <div class="title">SaaS（B2B/B2C）中心</div>
+                <div class="desc">契約期間の利用料が明確<br>→年契約/長期の将来債権が作れる</div>
+              </div>
+              <div class="flow-box info">
+                <div class="title">スクール/ジム等（継続課金）</div>
+                <div class="desc">月謝・会費などの反復請求<br>→請求・回収オペの整備が重要</div>
+              </div>
+            </div>
+
+            <!-- Column 3: 候補 -->
+            <div class="flow-col">
+              <div class="flow-box step">
+                <div class="label">OUTPUT</div>
+                <div class="title">候補を絞り込む</div>
+              </div>
+              <div class="flow-box good">
+                <div class="title">早期払い（決済）</div>
+                <div class="desc">借金感：低 / 手続き：軽 / 体感：早い</div>
+                <div class="profit">貸主収益：中</div>
+              </div>
+              <div class="flow-box warn">
+                <div class="title">ファクタリングロボ for SaaS</div>
+                <div class="desc">借金感：中 / 一括で入る強み</div>
+                <div class="profit">貸主収益：条件次第</div>
+              </div>
+              <div class="flow-box info">
+                <div class="title">RBF</div>
+                <div class="desc">借金感：中 / 柔軟性が高い（説明次第）</div>
+                <div class="profit">貸主収益：中〜高</div>
+              </div>
+              <div class="flow-box stop">
+                <div class="title">前借り君（将来オプション）</div>
+                <div class="desc">借金感：高 / 体制整備が前提<br><strong>※現時点で提供不可</strong></div>
+                <div class="profit">貸主収益：高</div>
+              </div>
+            </div>
           </div>
-          <div class="md:col-span-2 flex items-center justify-center">
-            <div class="kpi text-3xl">→</div>
-          </div>
-          <div class="md:col-span-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-            <div class="font-black text-emerald-900">導入後（安心）</div>
-            <ul class="mt-2 small text-emerald-900/70 space-y-1">
-              <li>- 入金の見通しが立つ（早い）</li>
-              <li>- 手続きが短い（簡単）</li>
-              <li>- “借金っぽさ”が少ない説明ができる</li>
-            </ul>
-          </div>
-        </div>
-        <div class="callout mt-4 p-4 rounded-2xl">
-          <div class="font-black">刺さる順（仮）</div>
-          <div class="small muted mt-1">早期払い → ファクタリングロボ for SaaS → RBF →（将来）前借り君</div>
         </div>
       </div>
-
-      <div class="card p-5">
-        <div class="text-sm font-black text-slate-700">図表③ ペルソナB（成長投資したい）—導入前→導入後</div>
-        <div class="grid md:grid-cols-12 gap-4 mt-4">
-          <div class="md:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="font-black">導入前（焦り）</div>
-            <ul class="mt-2 small muted space-y-1">
-              <li>- 投資を前倒しできない（機会損失）</li>
-              <li>- 手続きが面倒だと着手が遅れる</li>
-              <li>- 固定返済で成長が鈍るのが怖い</li>
-            </ul>
-          </div>
-          <div class="md:col-span-2 flex items-center justify-center">
-            <div class="kpi text-3xl">→</div>
-          </div>
-          <div class="md:col-span-5 p-4 rounded-2xl bg-blue-50 border border-blue-200">
-            <div class="font-black text-blue-900">導入後（納得）</div>
-            <ul class="mt-2 small text-blue-900/70 space-y-1">
-              <li>- 初月にまとまった資金で投資できる</li>
-              <li>- 返済の納得感（柔軟性の説明）が通る</li>
-              <li>- 運用が簡単で本業に集中できる</li>
-            </ul>
-          </div>
+      <div class="summary-row">
+        <div class="summary-item">
+          <div class="label">借金感を下げるポイント</div>
+          <div class="value">「返済」「貸付」の言葉を避ける</div>
         </div>
-        <div class="callout mt-4 p-4 rounded-2xl">
-          <div class="font-black">刺さる順（仮）</div>
-          <div class="small muted mt-1">ファクタリングロボ for SaaS → RBF → 早期払い →（将来）前借り君</div>
+        <div class="summary-item">
+          <div class="label">前借り君の扱い</div>
+          <div class="value">将来オプション（貸金業登録等が前提）</div>
         </div>
-      </div>
-    </section>
-
-    <!-- Additional diagrams -->
-    <section id="diagrams" class="mb-3"></section>
-    <section class="card p-5 mb-6">
-      <div class="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <div class="text-sm font-black text-slate-700">図表④ 意思決定フロー（統合版）</div>
-          <div class="small muted mt-1">借り手（心理）と貸し手（収益/提供可否）の両方が、同じ順番で判断できるように統合しています。</div>
-        </div>
-        <div class="small muted">※ここだけ見れば提案順が決まる</div>
-      </div>
-
-      <div class="mt-4 diagram">
-        <div class="diagram-h">提案フロー（対象分岐＋提案順＋貸主の優先度）</div>
-        <div class="diagram-b">
-          <div class="small muted mb-3">
-            ポイント：まず借り手の「怖さ（手続き/スピード/固定返済）」を聞いて、次に「対象（SaaS中心か、スクール/ジム等の継続課金か）」で枝分かれさせます。<br/>
-            そのうえで、同じ候補が並ぶ場合は <span class="font-black">貸主の収益（目安）</span>も踏まえて順番を決めます（※収益は前提で変動）。
-          </div>
-          <svg viewBox="0 0 1120 620" width="100%" style="height:auto" role="img" aria-label="統合意思決定フロー">
-            <defs>
-              <style>
-                .t{font:900 14px ui-sans-serif,system-ui;fill:#0f172a}
-                .s{font:650 12px ui-sans-serif,system-ui;fill:#334155}
-                .xs{font:650 11px ui-sans-serif,system-ui;fill:#475569}
-                .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
-                .q{fill:#f8fafc;stroke:#cbd5e1;stroke-width:2}
-                .good{fill:#ecfdf5;stroke:#86efac;stroke-width:2}
-                .info{fill:#eff6ff;stroke:#93c5fd;stroke-width:2}
-                .warn{fill:#fff7ed;stroke:#fdba74;stroke-width:2}
-                .stop{fill:#fef2f2;stroke:#fecaca;stroke-width:2}
-                .line{stroke:#94a3b8;stroke-width:2;marker-end:url(#m)}
-                .tag{font:900 11px ui-sans-serif,system-ui;fill:#0f172a}
-                .pillG{fill:#dcfce7;stroke:#86efac;stroke-width:2}
-                .pillB{fill:#dbeafe;stroke:#93c5fd;stroke-width:2}
-                .pillO{fill:#ffedd5;stroke:#fdba74;stroke-width:2}
-              </style>
-              <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"></path>
-              </marker>
-            </defs>
-
-            <!-- Start -->
-            <rect x="24" y="24" width="340" height="86" rx="16" class="q"/>
-            <text x="44" y="56" class="t">① 最初に聞く（借り手の怖さ）</text>
-            <text x="44" y="80" class="s">「手続き」「スピード」「固定返済」どれが一番怖い？</text>
-
-            <!-- Fear branches -->
-            <rect x="24" y="132" width="340" height="86" rx="16" class="box"/>
-            <text x="44" y="164" class="t">A: まず“早く入る”が最優先</text>
-            <text x="44" y="188" class="s">資金ショート回避、明日が怖い</text>
-
-            <rect x="24" y="232" width="340" height="86" rx="16" class="box"/>
-            <text x="44" y="264" class="t">B: 手続きが重いのが無理</text>
-            <text x="44" y="288" class="s">稟議/法務/書類で遅れるのが怖い</text>
-
-            <rect x="24" y="332" width="340" height="86" rx="16" class="box"/>
-            <text x="44" y="364" class="t">C: 固定返済が怖い</text>
-            <text x="44" y="388" class="s">返済日が締切になると詰む</text>
-
-            <line x1="194" y1="110" x2="194" y2="132" class="line"/>
-            <line x1="194" y1="110" x2="194" y2="232" class="line"/>
-            <line x1="194" y1="110" x2="194" y2="332" class="line"/>
-
-            <!-- Target branch -->
-            <rect x="410" y="24" width="686" height="86" rx="16" class="q"/>
-            <text x="430" y="56" class="t">② 次に確認（対象の違い）</text>
-            <text x="430" y="80" class="s">今回は SaaS中心に限らず、スクール/ジム等の継続課金（サブスクペイ領域）にも広げる前提</text>
-
-            <rect x="410" y="132" width="330" height="96" rx="16" class="info"/>
-            <text x="430" y="164" class="t">SaaS（B2B/B2C）中心</text>
-            <text x="430" y="188" class="s">契約期間の利用料が明確</text>
-            <text x="430" y="210" class="xs">年契約/長期の将来債権が作れる</text>
-
-            <rect x="766" y="132" width="330" height="96" rx="16" class="info"/>
-            <text x="786" y="164" class="t">スクール/ジム等（継続課金）</text>
-            <text x="786" y="188" class="s">月謝/会費などの反復請求</text>
-            <text x="786" y="210" class="xs">請求・回収オペの整備が重要</text>
-
-            <line x1="753" y1="110" x2="575" y2="132" class="line"/>
-            <line x1="753" y1="110" x2="930" y2="132" class="line"/>
-
-            <!-- Candidate solutions -->
-            <rect x="410" y="252" width="330" height="124" rx="16" class="good"/>
-            <text x="430" y="284" class="t">候補① 早期払い（決済）</text>
-            <text x="430" y="308" class="s">借金感：低 / 手続き：軽 / 体感：早い</text>
-            <rect x="430" y="326" width="126" height="26" rx="13" class="pillG"/><text x="442" y="344" class="tag">貸主収益: 中</text>
-            <text x="430" y="366" class="xs">「毎月の入金が早くなる」説明が通しやすい</text>
-
-            <rect x="766" y="252" width="330" height="124" rx="16" class="warn"/>
-            <text x="786" y="284" class="t">候補② ファクタリング（将来債権）</text>
-            <text x="786" y="308" class="s">借金感：中 / 体感：一括で強い</text>
-            <rect x="786" y="326" width="126" height="26" rx="13" class="pillO"/><text x="798" y="344" class="tag">貸主収益: 条件次第</text>
-            <text x="786" y="366" class="xs">「契約期間分をまとめて資金化」＋請求代行</text>
-
-            <rect x="410" y="394" width="330" height="124" rx="16" class="info"/>
-            <text x="430" y="426" class="t">候補③ RBF</text>
-            <text x="430" y="450" class="s">借金感：中 / 柔軟性：高（説明次第）</text>
-            <rect x="430" y="468" width="126" height="26" rx="13" class="pillB"/><text x="442" y="486" class="tag">貸主収益: 中〜高</text>
-            <text x="430" y="508" class="xs">固定返済の恐怖を減らせる（売上連動の納得が鍵）</text>
-
-            <rect x="766" y="394" width="330" height="124" rx="16" class="stop"/>
-            <text x="786" y="426" class="t">将来：前借り君（貸付）</text>
-            <text x="786" y="450" class="s">借金感：高になりやすい / 提供：体制整備が前提</text>
-            <rect x="786" y="468" width="126" height="26" rx="13" class="pillO"/><text x="798" y="486" class="tag">貸主収益: 高</text>
-            <text x="786" y="508" class="xs">※現時点で提供できない（貸金業登録等を含む整理が必要）</text>
-
-            <!-- Links from fear branches to candidates (proposal order guidance) -->
-            <line x1="364" y1="175" x2="410" y2="314" class="line"/>
-            <line x1="364" y1="275" x2="410" y2="314" class="line"/>
-            <line x1="364" y1="375" x2="410" y2="456" class="line"/>
-
-            <!-- Links from targets to factoring node -->
-            <line x1="575" y1="228" x2="930" y2="252" class="line"/>
-            <line x1="930" y1="228" x2="930" y2="252" class="line"/>
-
-            <!-- Profit-aware ordering -->
-            <rect x="24" y="452" width="340" height="166" rx="16" class="q"/>
-            <text x="44" y="482" class="t">③ 最後に順番を決める（貸主も含めて）</text>
-            <text x="44" y="506" class="s">同じ候補が複数ある場合の“提案順”</text>
-            <text x="44" y="536" class="xs">1) 借り手の怖さが一番下がるもの（離脱防止）</text>
-            <text x="44" y="558" class="xs">2) 対象/運用に合うもの（提供可否の確度）</text>
-            <text x="44" y="580" class="xs">3) その中で貸主収益が高い順（目安）</text>
-            <text x="44" y="604" class="xs">※収益は料率・期間・運用前提で変動</text>
-          </svg>
+        <div class="summary-item">
+          <div class="label">参考</div>
+          <div class="value"><a href="https://www.robotpayment.co.jp/lan/factoring_robo/saas/" target="_blank" style="color: var(--teal); text-decoration: underline;">ファクタリングロボ for SaaS 公式</a></div>
         </div>
       </div>
     </section>
-
-    <footer class="mt-10 pt-6 border-t border-slate-200 small muted">
-      参考：ファクタリングロボ for SaaS の説明（将来債権の現金化、請求代行、締め日から最短5営業日） —
-      <a class="font-black underline" href="https://www.robotpayment.co.jp/lan/factoring_robo/saas/" target="_blank" rel="noreferrer">公式ページ</a>
-    </footer>
   </div>
-
-  <script>
-    // 定量ベースのマトリクス
-    const matrix = [
-      {
-        name: '早期払い',
-        docs: '1〜2点',
-        reviewDays: '即日〜1営業日',
-        speed: '翌1日払い（実質0サイト）',
-        repayType: '返済なし',
-        repayTypeClass: 's-gg',
-        maxAmount: '月売上相当',
-        maxAmountNote: '（毎月の確定売上）',
-        debtLegal: '借入ではない',
-        debtBS: '売掛金消滅',
-        debtClass: 's-gg',
-        note: '「毎月の入金が早いだけ」と説明しやすい'
-      },
-      {
-        name: 'ファクタリングロボ for SaaS',
-        docs: '3〜5点',
-        reviewDays: '2〜5営業日',
-        speed: '最短5営業日',
-        repayType: '返済なし',
-        repayTypeClass: 's-gg',
-        maxAmount: '年契約総額',
-        maxAmountNote: '（将来債権1年分等）',
-        debtLegal: '借入ではない',
-        debtBS: '前受金計上',
-        debtClass: 's-g',
-        note: '一括で大きく入る。契約期間で規模が決まる'
-      },
-      {
-        name: 'RBF',
-        docs: '5〜10点',
-        reviewDays: '3〜10営業日',
-        speed: '5〜10営業日',
-        repayType: '売上連動',
-        repayTypeClass: 's-g',
-        maxAmount: '月売上×3〜6ヶ月',
-        maxAmountNote: '（審査による）',
-        debtLegal: '事実上の借入',
-        debtBS: '負債計上',
-        debtClass: 's-n',
-        note: '「売上に連動」の説明が通れば柔軟性を訴求可'
-      },
-      {
-        name: '前借り君（将来）',
-        docs: '10点以上',
-        reviewDays: '7〜14営業日',
-        speed: '7〜14営業日',
-        repayType: '固定返済',
-        repayTypeClass: 's-b',
-        maxAmount: '審査次第',
-        maxAmountNote: '（数百万〜）',
-        debtLegal: '貸付（金銭消費貸借）',
-        debtBS: '負債計上',
-        debtClass: 's-b',
-        note: '貸付の文脈が出ると借金感が上がる。体制整備が前提'
-      }
-    ];
-
-    const renderMatrix = () => {
-      const body = document.getElementById('matrixBody');
-      body.innerHTML = '';
-      matrix.forEach((r) => {
-        body.innerHTML += `
-          <tr>
-            <td class="font-black">${r.name}</td>
-            <td>
-              <div class="font-bold">${r.docs}</div>
-              <div class="text-xs text-slate-500">${r.reviewDays}</div>
-            </td>
-            <td class="font-bold">${r.speed}</td>
-            <td><span class="score pill ${r.repayTypeClass}">${r.repayType}</span></td>
-            <td>
-              <div class="font-bold">${r.maxAmount}</div>
-              <div class="text-xs text-slate-500">${r.maxAmountNote}</div>
-            </td>
-            <td class="focus-col">
-              <div class="font-bold">${r.debtLegal}</div>
-              <div class="text-xs"><span class="score pill ${r.debtClass}">${r.debtBS}</span></div>
-            </td>
-            <td class="muted text-xs">${r.note}</td>
-          </tr>
-        `;
-      });
-    };
-
-    const modeMatrixBtn = document.getElementById('modeMatrix');
-    const modeStoryBtn = document.getElementById('modeStory');
-    const matrixSection = document.getElementById('matrixSection');
-    const storySection = document.getElementById('storySection');
-
-    const setMode = (mode) => {
-      const isMatrix = mode === 'matrix';
-      matrixSection.classList.toggle('hidden', !isMatrix);
-      storySection.classList.toggle('hidden', isMatrix);
-      modeMatrixBtn.classList.toggle('bg-slate-900', isMatrix);
-      modeMatrixBtn.classList.toggle('text-white', isMatrix);
-      modeMatrixBtn.classList.toggle('bg-white', !isMatrix);
-      modeMatrixBtn.classList.toggle('text-slate-900', !isMatrix);
-      modeStoryBtn.classList.toggle('bg-slate-900', !isMatrix);
-      modeStoryBtn.classList.toggle('text-white', !isMatrix);
-      modeStoryBtn.classList.toggle('bg-white', isMatrix);
-      modeStoryBtn.classList.toggle('text-slate-900', isMatrix);
-    };
-
-    modeMatrixBtn.addEventListener('click', () => setMode('matrix'));
-    modeStoryBtn.addEventListener('click', () => setMode('story'));
-
-    renderMatrix();
-  </script>
 </body>
 </html>
-
-
