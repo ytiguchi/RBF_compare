@@ -190,21 +190,24 @@
                     <span class="bg-amber-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm">03</span>
                     <h2 class="text-xl font-black tracking-tight text-slate-900">ファクタリングロボ for SaaS</h2>
                 </div>
-                <div class="flex gap-8 items-center flex-1 max-w-3xl px-6">
-                    <div class="flex-1">
-                        <span class="param-hero-label">手数料率（年契約総額に対して）: <span id="factoringFeeRateLabel" class="text-amber-600 font-black">2.0</span>%</span>
+                <div class="flex gap-6 items-end flex-1 max-w-4xl px-6">
+                    <div class="flex-1 min-w-[140px]">
+                        <span class="param-hero-label block leading-tight mb-1">手数料率<br><span class="text-slate-400 text-[10px]">（年契約総額に対して）</span></span>
+                        <div class="text-amber-600 font-black text-lg"><span id="factoringFeeRateLabel">2.0</span>%</div>
                         <input type="range" id="factoringFeeRateSlider" min="0.5" max="10" step="0.1" value="2.0">
                     </div>
-                    <div class="flex-1">
-                        <span class="param-hero-label">契約期間（将来債権の対象）: <span id="factoringTermLabel" class="text-amber-600 font-black">12</span>ヶ月</span>
+                    <div class="flex-1 min-w-[120px]">
+                        <span class="param-hero-label block leading-tight mb-1">契約期間<br><span class="text-slate-400 text-[10px]">（将来債権の対象）</span></span>
+                        <div class="text-amber-600 font-black text-lg"><span id="factoringTermLabel">12</span>ヶ月</div>
                         <input type="range" id="factoringTermSlider" min="3" max="12" step="1" value="12">
                     </div>
-                    <div class="flex-1">
-                        <span class="param-hero-label">月額費用（請求代行等）: <span id="factoringMonthlyFeeLabel" class="text-amber-600 font-black">2.88</span>万</span>
+                    <div class="flex-1 min-w-[120px]">
+                        <span class="param-hero-label block leading-tight mb-1">月額費用<br><span class="text-slate-400 text-[10px]">（請求代行等）</span></span>
+                        <div class="text-amber-600 font-black text-lg"><span id="factoringMonthlyFeeLabel">2.88</span>万</div>
                         <input type="range" id="factoringMonthlyFeeSlider" min="0" max="10" step="0.1" value="2.88">
                     </div>
                     <div class="min-w-[100px]">
-                        <span class="param-hero-label">利息回収合計</span>
+                        <span class="param-hero-label block mb-1">利息回収合計</span>
                         <span id="factoringTotalProfit" class="total-profit-badge !bg-amber-50 !text-amber-700 !border-amber-100">400.00万</span>
                     </div>
                 </div>
