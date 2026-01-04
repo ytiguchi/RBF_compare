@@ -6,10 +6,10 @@
   <title>借り手の感情比較（別章） | 株式会社ロボットペイメント</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; }
-    .container { max-width: 1400px; margin: 0 auto; padding: 28px 18px 56px; }
+    body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; line-height: 1.7; letter-spacing: 0.01em; }
+    .container { max-width: 1320px; margin: 0 auto; padding: 26px 16px 72px; }
     .badge { display:inline-flex; align-items:center; padding: 2px 10px; border-radius: 9999px; font-weight: 900; font-size: 12px; border: 1px solid rgba(15,23,42,.15); }
-    .card { background:#fff; border:1px solid rgba(15,23,42,.12); border-radius: 18px; box-shadow: 0 8px 24px rgba(15,23,42,.06); }
+    .card { background:#fff; border:1px solid rgba(15,23,42,.12); border-radius: 18px; box-shadow: 0 10px 28px rgba(15,23,42,.06); }
     .kpi { font-weight: 900; letter-spacing: -0.02em; }
     .grid-table { width:100%; border-collapse: separate; border-spacing:0; font-size: 13px; }
     .grid-table th { position: sticky; top: 0; background: #f8fafc; z-index: 2; text-align:left; padding: 10px 10px; border-bottom: 2px solid rgba(15,23,42,.10); }
@@ -23,6 +23,18 @@
     .muted { color: rgba(15,23,42,.62); }
     .callout { border-left: 4px solid #0f172a; background: #f8fafc; }
     .small { font-size: 12px; }
+    .toc a { color: rgba(15,23,42,.78); text-decoration: none; }
+    .toc a:hover { color: rgba(15,23,42,1); text-decoration: underline; text-underline-offset: 3px; }
+    .section-title { font-size: 14px; font-weight: 900; color: rgba(15,23,42,.82); }
+    .subtle { background: linear-gradient(180deg, rgba(248,250,252,1), rgba(248,250,252,0)); }
+    .focus-col { background: #fff7ed; }
+    .diagram { border:1px solid rgba(15,23,42,.10); background:#fff; border-radius: 16px; overflow:hidden; }
+    .diagram-h { background:#0f172a; color:#fff; padding: 10px 14px; font-weight: 900; font-size: 13px; }
+    .diagram-b { padding: 14px; }
+    details > summary { cursor: pointer; list-style: none; }
+    details > summary::-webkit-details-marker { display:none; }
+    .summary-chip { display:inline-flex; align-items:center; gap:8px; padding: 10px 12px; border-radius: 14px; border:1px solid rgba(15,23,42,.14); background:#fff; font-weight: 900; }
+    .hr { height:1px; background: rgba(15,23,42,.10); }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -32,7 +44,7 @@
         <div>
           <div class="text-slate-700 font-black tracking-tight">株式会社ロボットペイメント</div>
           <h1 class="text-3xl md:text-4xl font-black tracking-tight mt-1">借り手の「感情」で比較（別章）</h1>
-          <div class="muted mt-2 small">貸主視点の定量比較とは独立に、借り手が感じる「簡単さ・早さ・返済の柔軟性・借金感の少なさ」で比較する。</div>
+          <div class="muted mt-2 small">定量（キャッシュフロー）とは別に、借り手が“導入を決める時の心理”で比較する。</div>
         </div>
         <div class="flex gap-2 flex-wrap">
           <span class="badge bg-white">軸: 借金感の少なさ（最重要）</span>
@@ -41,26 +53,43 @@
       </div>
     </header>
 
-    <section class="card p-5 mb-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div class="text-sm font-black text-slate-700">表示モード</div>
-          <div class="muted small">マトリクス（俯瞰）＋ストーリー（納得）を並べる</div>
+    <section class="card p-5 mb-6 subtle">
+      <div class="grid lg:grid-cols-12 gap-4 items-start">
+        <div class="lg:col-span-5">
+          <div class="section-title">このページの使い方</div>
+          <div class="small muted mt-1">
+            まずは「感情マトリクス」で全体像を掴み、必要なところだけ図解を開いて確認してください。<br/>
+            ※評価は“借り手の体感”の仮置きです。商談の言い方・運用設計で簡単に変わります。
+          </div>
         </div>
-        <div class="flex gap-2">
-          <button id="modeMatrix" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-slate-900 text-white">マトリクス</button>
-          <button id="modeStory" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-white text-slate-900">ストーリー</button>
+        <div class="lg:col-span-4">
+          <div class="section-title">目次</div>
+          <div class="toc small mt-2 grid grid-cols-2 gap-x-3 gap-y-1">
+            <a href="#matrix">1. 感情マトリクス</a>
+            <a href="#story">2. ペルソナ別ストーリー</a>
+            <a href="#diagrams">3. 追加図解（折りたたみ）</a>
+            <a href="#maegari-note">4. 前借り君の注記</a>
+          </div>
+        </div>
+        <div class="lg:col-span-3">
+          <div class="section-title">表示</div>
+          <div class="flex gap-2 mt-2">
+            <button id="modeMatrix" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-slate-900 text-white">マトリクス</button>
+            <button id="modeStory" class="px-3 py-2 rounded-xl font-black border border-slate-200 bg-white text-slate-900">ストーリー</button>
+          </div>
+          <div class="small muted mt-2">図解は “追加図解” にまとめています。</div>
         </div>
       </div>
     </section>
 
     <!-- Matrix -->
+    <section id="matrix" class="mb-3"></section>
     <section id="matrixSection" class="card overflow-hidden mb-6">
       <div class="p-5 border-b border-slate-200">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div class="text-sm font-black text-slate-700">図表① 感情マトリクス（俯瞰・1枚で比較）</div>
-            <div class="muted small mt-1">評価は「借り手の体感」。条件・説明・運用設計で上下する。</div>
+            <div class="text-sm font-black text-slate-700">図表① 感情マトリクス（俯瞰）</div>
+            <div class="muted small mt-1">「借金感の少なさ」を最重要列として見てください。</div>
           </div>
           <div class="text-right">
             <div class="text-sm font-black text-slate-700">評価記号</div>
@@ -76,7 +105,7 @@
               <th class="w-[150px]">簡単（手続き）</th>
               <th class="w-[150px]">早い（入金体感）</th>
               <th class="w-[150px]">返済が柔軟</th>
-              <th class="w-[220px]">借金感が少ない（最重要）</th>
+              <th class="w-[220px]" style="background:#fff7ed;">借金感が少ない（最重要）</th>
               <th>コメント（借り手の脳内）</th>
             </tr>
           </thead>
@@ -86,6 +115,7 @@
     </section>
 
     <!-- Story -->
+    <section id="story" class="mb-3"></section>
     <section id="storySection" class="hidden space-y-6">
       <div class="card p-5">
         <div class="text-sm font-black text-slate-700">図表② ペルソナA（資金繰りが苦しい）—導入前→導入後</div>
@@ -146,8 +176,209 @@
       </div>
     </section>
 
+    <!-- Additional diagrams -->
+    <section id="diagrams" class="mb-3"></section>
+    <section class="card p-5 mb-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div class="text-sm font-black text-slate-700">図表④ 追加図解（必要な時だけ開く）</div>
+          <div class="small muted mt-1">“借金感が出る理由”と“説明で下げられるポイント”を中心に、過密にならない範囲でまとめています。</div>
+        </div>
+        <div class="small muted">※展開しても既存比較の見通しを邪魔しない設計</div>
+      </div>
+
+      <div class="mt-4 grid lg:grid-cols-2 gap-4">
+        <details class="diagram">
+          <summary class="diagram-h">借金感の分解（何が引き金になるか）</summary>
+          <div class="diagram-b">
+            <div class="small muted mb-3">借金感は「言葉」「固定返済」「第三者/通知」「督促連想」などの複合です。どこで上がるかを先に特定すると、説明が短くなります。</div>
+            <svg viewBox="0 0 920 360" width="100%" style="height:auto" role="img" aria-label="借金感の分解図">
+              <defs>
+                <style>
+                  .n{font:700 14px ui-sans-serif,system-ui;fill:#0f172a}
+                  .s{font:600 12px ui-sans-serif,system-ui;fill:#334155}
+                  .b{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+                  .k{fill:#fff7ed;stroke:#fdba74;stroke-width:2}
+                  .l{stroke:#94a3b8;stroke-width:2}
+                </style>
+              </defs>
+              <rect x="16" y="140" width="220" height="84" rx="16" class="k"/>
+              <text x="32" y="174" class="n">借金感</text>
+              <text x="32" y="198" class="s">心理的抵抗の総和</text>
+
+              <line x1="236" y1="182" x2="310" y2="90" class="l"/>
+              <line x1="236" y1="182" x2="310" y2="180" class="l"/>
+              <line x1="236" y1="182" x2="310" y2="270" class="l"/>
+
+              <rect x="310" y="44" width="270" height="92" rx="16" class="b"/>
+              <text x="330" y="78" class="n">言葉/契約の文脈</text>
+              <text x="330" y="102" class="s">「貸付」「返済」「督促」…</text>
+              <text x="330" y="124" class="s">→ 表現次第で急上昇</text>
+
+              <rect x="310" y="134" width="270" height="92" rx="16" class="b"/>
+              <text x="330" y="168" class="n">固定返済の恐怖</text>
+              <text x="330" y="192" class="s">返済日が“締切”になる</text>
+              <text x="330" y="214" class="s">→ 資金繰りAで致命傷</text>
+
+              <rect x="310" y="224" width="270" height="92" rx="16" class="b"/>
+              <text x="330" y="258" class="n">第三者/通知・信用不安</text>
+              <text x="330" y="282" class="s">取引先に知られる連想</text>
+              <text x="330" y="304" class="s">→ 稟議/法務で詰む</text>
+
+              <line x1="580" y1="90" x2="650" y2="90" class="l"/>
+              <line x1="580" y1="180" x2="650" y2="180" class="l"/>
+              <line x1="580" y1="270" x2="650" y2="270" class="l"/>
+
+              <rect x="650" y="44" width="254" height="92" rx="16" class="b"/>
+              <text x="670" y="78" class="n">下げ方（例）</text>
+              <text x="670" y="102" class="s">「前倒し入金」等に統一</text>
+              <text x="670" y="124" class="s">説明を短く・具体に</text>
+
+              <rect x="650" y="134" width="254" height="92" rx="16" class="b"/>
+              <text x="670" y="168" class="n">下げ方（例）</text>
+              <text x="670" y="192" class="s">売上連動/定額手数料で</text>
+              <text x="670" y="214" class="s">“返済日”の恐怖を減らす</text>
+
+              <rect x="650" y="224" width="254" height="92" rx="16" class="b"/>
+              <text x="670" y="258" class="n">下げ方（例）</text>
+              <text x="670" y="282" class="s">関係者/通知の論点を先出し</text>
+              <text x="670" y="304" class="s">稟議の材料を用意</text>
+            </svg>
+          </div>
+        </details>
+
+        <details class="diagram">
+          <summary class="diagram-h">意思決定フロー（まず何を優先するか）</summary>
+          <div class="diagram-b">
+            <div class="small muted mb-3">借り手は“正しい比較”ではなく“怖さの少ない順”で選びがちです。最初の質問を固定するとブレません。</div>
+            <svg viewBox="0 0 920 360" width="100%" style="height:auto" role="img" aria-label="意思決定フロー図">
+              <defs>
+                <style>
+                  .n{font:700 14px ui-sans-serif,system-ui;fill:#0f172a}
+                  .s{font:600 12px ui-sans-serif,system-ui;fill:#334155}
+                  .b{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+                  .g{fill:#ecfdf5;stroke:#86efac;stroke-width:2}
+                  .a{fill:#eff6ff;stroke:#93c5fd;stroke-width:2}
+                  .o{fill:#fff7ed;stroke:#fdba74;stroke-width:2}
+                  .l{stroke:#94a3b8;stroke-width:2;marker-end:url(#m)}
+                </style>
+                <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <rect x="26" y="24" width="280" height="90" rx="16" class="b"/>
+              <text x="46" y="58" class="n">最初の質問</text>
+              <text x="46" y="82" class="s">「いま一番怖いのは何ですか？」</text>
+
+              <rect x="26" y="150" width="280" height="86" rx="16" class="b"/>
+              <text x="46" y="184" class="n">A: とにかく遅いのが怖い</text>
+              <text x="46" y="208" class="s">→ 入金の体感が最優先</text>
+
+              <rect x="26" y="252" width="280" height="86" rx="16" class="b"/>
+              <text x="46" y="286" class="n">B: 固定返済が怖い</text>
+              <text x="46" y="310" class="s">→ 返済柔軟性が最優先</text>
+
+              <line x1="166" y1="114" x2="166" y2="150" class="l"/>
+              <line x1="166" y1="114" x2="166" y2="252" class="l"/>
+
+              <rect x="360" y="145" width="250" height="98" rx="16" class="g"/>
+              <text x="380" y="180" class="n">早期払い</text>
+              <text x="380" y="204" class="s">“借金感”を出さずに早い</text>
+
+              <rect x="650" y="145" width="244" height="98" rx="16" class="o"/>
+              <text x="670" y="180" class="n">ファクタリングロボ</text>
+              <text x="670" y="204" class="s">初月にまとまって入る</text>
+
+              <rect x="360" y="248" width="250" height="98" rx="16" class="a"/>
+              <text x="380" y="283" class="n">RBF</text>
+              <text x="380" y="307" class="s">説明が通れば柔軟性が強い</text>
+
+              <line x1="306" y1="193" x2="360" y2="193" class="l"/>
+              <line x1="610" y1="193" x2="650" y2="193" class="l"/>
+              <line x1="306" y1="295" x2="360" y2="295" class="l"/>
+            </svg>
+          </div>
+        </details>
+
+        <details class="diagram">
+          <summary class="diagram-h">言い換え辞書（借金感を上げないための最小ルール）</summary>
+          <div class="diagram-b">
+            <div class="small muted mb-3">借り手は言葉で先に拒否します。営業チームで用語を揃えるだけでも効果が出ます（Q4が固まったら更新）。</div>
+            <div class="overflow-auto">
+              <table class="grid-table min-w-[860px]">
+                <thead>
+                  <tr>
+                    <th class="w-[240px]">避けたい言い方（例）</th>
+                    <th class="w-[260px]" style="background:#ecfdf5;">推奨（借金感を出しにくい）</th>
+                    <th>補足</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>貸付 / 借入 / 返済</td>
+                    <td class="focus-col">前倒し入金 / 前受け / 早期入金</td>
+                    <td class="muted">“借金”の連想を避ける</td>
+                  </tr>
+                  <tr>
+                    <td>取り立て / 督促</td>
+                    <td class="focus-col">ご案内 / リマインド / 確認</td>
+                    <td class="muted">言葉の温度を下げる</td>
+                  </tr>
+                  <tr>
+                    <td>債権譲渡（強調）</td>
+                    <td class="focus-col">請求・回収の代行（目的を先に）</td>
+                    <td class="muted">仕組みより便益を先に</td>
+                  </tr>
+                  <tr>
+                    <td>返済日（固定）</td>
+                    <td class="focus-col">売上に合わせた回収 / 定額の上乗せ</td>
+                    <td class="muted">“締切”の恐怖を避ける</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <details class="diagram">
+          <summary class="diagram-h">提供可否マップ（会議での誤解を先に潰す）</summary>
+          <div class="diagram-b">
+            <div class="small muted mb-3">会議では「同列に並んでいる＝今すぐ提供できる」と誤解されがちです。明確に分けておくのが安全です。</div>
+            <svg viewBox="0 0 920 260" width="100%" style="height:auto" role="img" aria-label="提供可否マップ">
+              <defs>
+                <style>
+                  .n{font:900 14px ui-sans-serif,system-ui;fill:#0f172a}
+                  .s{font:600 12px ui-sans-serif,system-ui;fill:#334155}
+                  .b{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+                  .g{fill:#ecfdf5;stroke:#86efac;stroke-width:2}
+                  .y{fill:#fff7ed;stroke:#fdba74;stroke-width:2}
+                </style>
+              </defs>
+              <rect x="22" y="24" width="430" height="212" rx="18" class="g"/>
+              <text x="44" y="58" class="n">今すぐ提案できる</text>
+              <text x="44" y="86" class="s">（借金感を抑えた説明が可能）</text>
+              <rect x="44" y="110" width="176" height="46" rx="14" class="b"/>
+              <text x="60" y="140" class="n">早期払い</text>
+              <rect x="44" y="170" width="320" height="46" rx="14" class="b"/>
+              <text x="60" y="200" class="n">ファクタリングロボ for SaaS</text>
+              <rect x="234" y="110" width="176" height="46" rx="14" class="b"/>
+              <text x="250" y="140" class="n">RBF</text>
+
+              <rect x="468" y="24" width="430" height="212" rx="18" class="y"/>
+              <text x="490" y="58" class="n">将来オプション（比較用）</text>
+              <text x="490" y="86" class="s">（提供には体制整備が前提）</text>
+              <rect x="490" y="110" width="320" height="46" rx="14" class="b"/>
+              <text x="506" y="140" class="n">前借り君（貸付）</text>
+              <text x="490" y="178" class="s">貸金業登録等の前提を明記して扱う</text>
+            </svg>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="maegari-note" class="mb-3"></section>
     <section class="card p-5">
-      <div class="text-sm font-black text-slate-700">図表④ 前借り君（将来オプション）—誤解防止の明記</div>
+      <div class="text-sm font-black text-slate-700">図表⑤ 前借り君（将来オプション）—誤解防止の明記</div>
       <div class="mt-3 p-4 rounded-2xl bg-amber-50 border border-amber-200">
         <div class="font-black text-amber-900">重要</div>
         <div class="small text-amber-900/80 mt-1">
@@ -223,7 +454,7 @@
             <td>${scoreCell(r.simple)}</td>
             <td>${scoreCell(r.fast)}</td>
             <td>${scoreCell(r.flexible)}</td>
-            <td>${scoreCell(r.debtFeel)}</td>
+            <td class="focus-col">${scoreCell(r.debtFeel)}</td>
             <td class="muted">${r.comment}</td>
           </tr>
         `;
