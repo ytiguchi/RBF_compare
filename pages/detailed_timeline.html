@@ -8,13 +8,61 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #f8fafc; }
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --accent-blue: #2563eb;
+            --accent-green: #22c55e;
+            --accent-amber: #f59e0b;
+            --text: #0f172a;
+            --muted: #64748b;
+        }
+        body { font-family: 'SF Pro Display', 'Inter', 'Noto Sans JP', sans-serif; background-color: var(--bg); color: var(--text); }
+        .container { max-width: 1600px; margin: 0 auto; padding: 32px 20px 44px; }
+        
+        /* Header & Nav */
+        .header { text-align: center; margin-bottom: 32px; }
+        .logo { font-size: 0.9rem; color: var(--muted); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+        .header h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 12px; color: #0f172a; }
+        .header-sub { color: var(--muted); font-size: 0.95rem; }
+
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 26px;
+            background: #e7eef7;
+            padding: 8px;
+            border-radius: 14px;
+            border: 1px solid #d7deeb;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .tab-btn {
+            padding: 12px 22px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #334155;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .tab-btn:hover { color: #0f172a; border-color: #cbd5e1; background: #f8fafc; }
+        .tab-btn.active { background: #2563eb; border-color: #2563eb; color: #f8fafc; box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2); }
+
         .chart-container { position: relative; height: 320px; width: 100%; }
         .table-container { overflow-x: auto; }
         table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.75rem; }
         th { background-color: #f1f5f9; border-bottom: 2px solid #e2e8f0; padding: 6px 8px; font-weight: 800; text-align: left; color: #475569; position: sticky; top: 0; z-index: 10; }
         td { border-bottom: 1px solid #f1f5f9; padding: 5px 8px; color: #1e293b; }
-        section { scroll-margin-top: 80px; }
+        section { scroll-margin-top: 100px; }
         .highlight-row { background-color: rgba(59, 130, 246, 0.08); }
         .param-hero { @apply text-2xl font-black tracking-tighter text-slate-900 mt-0.5 block; }
         .param-hero-label { @apply text-[9px] font-black uppercase tracking-[0.1em] text-slate-400 block; }
@@ -29,18 +77,22 @@
 </head>
 <body class="text-slate-900 pb-20">
 
-    <nav class="bg-slate-900 text-white sticky top-0 z-50 shadow-xl">
-        <div class="max-w-[1600px] mx-auto px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <span class="font-black text-xl tracking-tighter text-white">株式会社ロボットペイメント</span>
-            </div>
-            <div class="flex gap-6 items-center">
-                <a href="#summary" class="text-xs font-bold text-slate-400 hover:text-white transition">シミュレーション比較</a>
-            </div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ROBOT PAYMENT</div>
+            <h1>資金調達オプション比較</h1>
+            <p class="header-sub">詳細タイムチャート：1,000万円貸付時のキャッシュフロー詳細シミュレーション</p>
         </div>
-    </nav>
 
-    <main class="max-w-[1600px] mx-auto px-8 mt-10 space-y-8">
+        <div class="tab-nav">
+            <a href="#rbf" class="tab-btn">01 RBF</a>
+            <a href="#maegari" class="tab-btn">02 前借り君</a>
+            <a href="#factoring" class="tab-btn">03 ファクタリング</a>
+            <a href="#early-settlement" class="tab-btn">04 早期払い</a>
+            <a href="#summary" class="tab-btn active">📊 サマリー</a>
+        </div>
+
+        <main class="mt-4 space-y-8">
 
         <!-- 1. RBF -->
         <section id="rbf" class="section-card">
@@ -233,11 +285,12 @@
 
     </main>
 
-    <footer class="mt-16 py-10 bg-white border-t border-slate-200 text-center">
-        <p class="text-slate-400 text-[9px] font-black uppercase tracking-[0.5em]">© 2024 FINANCE LAB | STRATEGY DEVELOPMENT DIVISION</p>
-    </footer>
+    <div class="footer mt-16 py-10 text-center border-t border-slate-200 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+        © 2024 ROBOT PAYMENT Inc. | 資金調達オプション比較（貸主視点）
+    </div>
+</div>
 
-    <script>
+<script>
         const formatNum = (v) => v.toFixed(2);
         
         let charts = {};
