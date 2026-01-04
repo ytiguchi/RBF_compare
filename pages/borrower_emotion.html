@@ -88,25 +88,26 @@
       <div class="p-5 border-b border-slate-200">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div class="text-sm font-black text-slate-700">図表① 感情マトリクス（俯瞰）</div>
-            <div class="muted small mt-1">「借金感の少なさ」を最重要列として見てください。</div>
+            <div class="text-sm font-black text-slate-700">図表① 比較マトリクス（定量ベース）</div>
+            <div class="muted small mt-1">可能な限り定量的な指標で比較。「借金感」列は法的区分+BS計上で判断。</div>
           </div>
           <div class="text-right">
-            <div class="text-sm font-black text-slate-700">評価記号</div>
-            <div class="small muted mt-1">◎ 強い安心 / ○ 良い / △ 説明次第 / × 抵抗大</div>
+            <div class="text-sm font-black text-slate-700">凡例</div>
+            <div class="small muted mt-1">数値は目安。実際は契約・運用条件で変動。</div>
           </div>
         </div>
       </div>
       <div class="p-0 overflow-auto">
-        <table class="grid-table min-w-[980px]">
+        <table class="grid-table min-w-[1180px]">
           <thead>
             <tr>
-              <th class="w-[220px]">手段</th>
-              <th class="w-[150px]">簡単（手続き）</th>
-              <th class="w-[150px]">早い（入金体感）</th>
-              <th class="w-[150px]">返済が柔軟</th>
-              <th class="w-[220px]" style="background:#fff7ed;">借金感が少ない（最重要）</th>
-              <th>コメント（借り手の脳内）</th>
+              <th class="w-[180px]">手段</th>
+              <th class="w-[140px]">手続き<br/><span class="font-normal text-xs text-slate-500">書類数 / 審査日数</span></th>
+              <th class="w-[130px]">入金スピード<br/><span class="font-normal text-xs text-slate-500">申込→着金</span></th>
+              <th class="w-[130px]">返済タイプ</th>
+              <th class="w-[160px]">借りれる額<br/><span class="font-normal text-xs text-slate-500">目安</span></th>
+              <th class="w-[200px]" style="background:#fff7ed;">借金感<br/><span class="font-normal text-xs text-slate-500">法的区分 / BS計上</span></th>
+              <th>備考</th>
             </tr>
           </thead>
           <tbody id="matrixBody"></tbody>
@@ -311,49 +312,65 @@
   </div>
 
   <script>
-    const SCORES = {
-      '◎': { cls: 'score pill s-gg', label: '◎' },
-      '○': { cls: 'score pill s-g',  label: '○' },
-      '△': { cls: 'score pill s-n',  label: '△' },
-      '×': { cls: 'score pill s-b',  label: '×' }
-    };
-
+    // 定量ベースのマトリクス
     const matrix = [
       {
         name: '早期払い',
-        simple: '◎',
-        fast: '◎',
-        flexible: '○',
-        debtFeel: '◎',
-        comment: '「毎月の入金が早いだけ。借金っぽくない」'
+        docs: '1〜2点',
+        reviewDays: '即日〜1営業日',
+        speed: '翌1日払い（実質0サイト）',
+        repayType: '返済なし',
+        repayTypeClass: 's-gg',
+        maxAmount: '月売上相当',
+        maxAmountNote: '（毎月の確定売上）',
+        debtLegal: '借入ではない',
+        debtBS: '売掛金消滅',
+        debtClass: 's-gg',
+        note: '「毎月の入金が早いだけ」と説明しやすい'
       },
       {
         name: 'ファクタリングロボ for SaaS',
-        simple: '○',
-        fast: '◎',
-        flexible: '○',
-        debtFeel: '○',
-        comment: '「一括で入るのは強い。契約/請求の説明が長いと不安」'
+        docs: '3〜5点',
+        reviewDays: '2〜5営業日',
+        speed: '最短5営業日',
+        repayType: '返済なし',
+        repayTypeClass: 's-gg',
+        maxAmount: '年契約総額',
+        maxAmountNote: '（将来債権1年分等）',
+        debtLegal: '借入ではない',
+        debtBS: '前受金計上',
+        debtClass: 's-g',
+        note: '一括で大きく入る。契約期間で規模が決まる'
       },
       {
         name: 'RBF',
-        simple: '○',
-        fast: '○',
-        flexible: '◎',
-        debtFeel: '△',
-        comment: '「返済が柔軟は良い。理解できないと“結局借金？”」'
+        docs: '5〜10点',
+        reviewDays: '3〜10営業日',
+        speed: '5〜10営業日',
+        repayType: '売上連動',
+        repayTypeClass: 's-g',
+        maxAmount: '月売上×3〜6ヶ月',
+        maxAmountNote: '（審査による）',
+        debtLegal: '事実上の借入',
+        debtBS: '負債計上',
+        debtClass: 's-n',
+        note: '「売上に連動」の説明が通れば柔軟性を訴求可'
       },
       {
         name: '前借り君（将来）',
-        simple: '△',
-        fast: '○',
-        flexible: '◎',
-        debtFeel: '×',
-        comment: '「“貸付”の文脈が出ると借金感が強い可能性」'
+        docs: '10点以上',
+        reviewDays: '7〜14営業日',
+        speed: '7〜14営業日',
+        repayType: '固定返済',
+        repayTypeClass: 's-b',
+        maxAmount: '審査次第',
+        maxAmountNote: '（数百万〜）',
+        debtLegal: '貸付（金銭消費貸借）',
+        debtBS: '負債計上',
+        debtClass: 's-b',
+        note: '貸付の文脈が出ると借金感が上がる。体制整備が前提'
       }
     ];
-
-    const scoreCell = (s) => `<span class="${SCORES[s].cls}">${SCORES[s].label}</span>`;
 
     const renderMatrix = () => {
       const body = document.getElementById('matrixBody');
@@ -362,11 +379,21 @@
         body.innerHTML += `
           <tr>
             <td class="font-black">${r.name}</td>
-            <td>${scoreCell(r.simple)}</td>
-            <td>${scoreCell(r.fast)}</td>
-            <td>${scoreCell(r.flexible)}</td>
-            <td class="focus-col">${scoreCell(r.debtFeel)}</td>
-            <td class="muted">${r.comment}</td>
+            <td>
+              <div class="font-bold">${r.docs}</div>
+              <div class="text-xs text-slate-500">${r.reviewDays}</div>
+            </td>
+            <td class="font-bold">${r.speed}</td>
+            <td><span class="score pill ${r.repayTypeClass}">${r.repayType}</span></td>
+            <td>
+              <div class="font-bold">${r.maxAmount}</div>
+              <div class="text-xs text-slate-500">${r.maxAmountNote}</div>
+            </td>
+            <td class="focus-col">
+              <div class="font-bold">${r.debtLegal}</div>
+              <div class="text-xs"><span class="score pill ${r.debtClass}">${r.debtBS}</span></div>
+            </td>
+            <td class="muted text-xs">${r.note}</td>
           </tr>
         `;
       });
